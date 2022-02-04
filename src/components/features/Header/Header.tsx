@@ -3,14 +3,22 @@ import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 
 function Header() {
-  const StyledTopbar = styled('button')({
-    height: '4rem',
-    position: 'fixed'
+  const StyledTopbar = styled('div')({
+    position: 'fixed',
+    display: 'flex',
+    padding: '1rem'
+  })
+
+  const StyledButton = styled(Button)({
+    background: 'transparent',
+    justifyContent: 'space-around',
+    fontWeight: 'bold'
   })
 
   return (
     <StyledTopbar>
-      <Button>Login</Button>
+      <StyledButton>Login</StyledButton>
+      <StyledButton>Logout</StyledButton>
     </StyledTopbar>
   )
 }
