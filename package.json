@@ -29,7 +29,7 @@
   "private": true,
   "dependencies": {
     "@mui/material": "latest",
-    "@mui/styled-engine-sc": "latest",
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@reduxjs/toolkit": "^1.7.2",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.0.0",
@@ -65,5 +65,8 @@
     "husky": "^7.0.4",
     "prettier": "^2.5.1",
     "typescript": "^4.4.2"
+  },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   }
 }
