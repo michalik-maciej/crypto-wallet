@@ -7,7 +7,9 @@ import CoinTable from '../../features/CoinTable/CoinTable'
 
 function Homepage() {
   const StyledContainer = styled(TableContainer)({
-    height: '100vh'
+    height: '100vh',
+    margin: '2rem auto',
+    maxWidth: '1080px'
   })
 
   return (

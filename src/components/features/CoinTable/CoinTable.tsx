@@ -1,14 +1,13 @@
 import React from 'react'
 import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
 import shortid from 'shortid'
 import { useGetAllCoinsQuery } from '../../../services/coingecko'
-import CoinDataFormatter from '../CoinDataFormatter/CoinDataFormatter'
+import DataFormatter, { columnCaptions } from '../DataFormatter/DataFormatter'
 import { RawCoinData } from '../../../redux/AppStateModel'
-import CoinDataTableCell from '../CoinDataTableCell/CoinDataTableCell'
+import DataTableCell from '../DataTableCell/DataTableCell'
 
 function CoinTable() {
   const { isLoading, data: rawCoinsData } = useGetAllCoinsQuery(null)
@@ -16,17 +15,20 @@ function CoinTable() {
   if (isLoading) return <div>Loading...</div>
 
   const formattedCoinsData = (rawCoinsData as RawCoinData[]).map((coin) =>
-    CoinDataFormatter(coin)
+    DataFormatter(coin)
   )
 
   return (
     <Table>
       <TableHead>
         <TableRow>
-          {formattedCoinsData[0].data.map((column) => (
-            <TableCell key={column.caption} sx={{ fontWeight: 'bold' }}>
-              {column.caption}
-            </TableCell>
+          {formattedCoinsData[0].data.map((coinData) => (
+            <DataTableCell
+              key={shortid()}
+              value={coinData.caption}
+              isHeader
+              isHideable={coinData.caption === columnCaptions.marketCap}
+            />
           ))}
         </TableRow>
       </TableHead>
@@ -34,7 +36,12 @@ function CoinTable() {
         {formattedCoinsData.map((coin) => (
           <TableRow key={coin.id}>
             {coin.data.map((coinData) => (
-              <CoinDataTableCell key={shortid()} value={coinData.value} />
+              <DataTableCell
+                key={shortid()}
+                value={coinData.value}
+                isHeader={false}
+                isHideable={coinData.caption === columnCaptions.marketCap}
+              />
             ))}
           </TableRow>
         ))}
