@@ -5,7 +5,7 @@ import bgImg from '../../../assets/hero-bg.jpg'
 
 const StyledGrid = styled(Grid)({
   position: 'relative',
-  height: '100vh',
+  height: '20vh',
   width: '100vw',
   overflow: 'hidden',
   backgroundImage: `url(${bgImg})`,

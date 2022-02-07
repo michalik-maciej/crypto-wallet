@@ -1,8 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-
-interface UserState {
-  logged: boolean
-}
+import { UserState } from './AppStateModel'
 
 const initialState: UserState = {
   logged: false

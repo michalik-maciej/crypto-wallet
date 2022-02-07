@@ -1,8 +1,8 @@
 import React from 'react'
 import { styled } from '@mui/material/styles'
-import Paper from '@mui/material/Paper'
 import TableContainer from '@mui/material/TableContainer'
 import Hero from '../../features/Hero/Hero'
+
 import CoinTable from '../../features/CoinTable/CoinTable'
 
 function Homepage() {

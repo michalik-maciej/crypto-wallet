@@ -8,9 +8,9 @@ interface MainLayoutProps {
 function MainLayout({ children }: MainLayoutProps) {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       {children}
-      <div>footer</div>
+      {/* <div>footer</div> */}
     </>
   )
 }
