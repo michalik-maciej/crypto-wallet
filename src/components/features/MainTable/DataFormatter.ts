@@ -7,8 +7,9 @@ export type CoinNameDataType = {
 }
 
 interface FormattedCoinData {
-  id: string
+  coinId: string
   data: {
+    id: string
     caption: string
     value: string | number | CoinNameDataType
   }[]
@@ -24,10 +25,15 @@ export const columnCaptions = {
 
 function DataFormatter(coinData: RawCoinData): FormattedCoinData {
   return {
-    id: coinData.id,
+    coinId: coinData.id,
     data: [
-      { caption: columnCaptions.rank, value: coinData.market_cap_rank },
       {
+        id: 'rank',
+        caption: columnCaptions.rank,
+        value: coinData.market_cap_rank
+      },
+      {
+        id: 'name',
         caption: columnCaptions.name,
         value: {
           image: coinData.image,
@@ -36,14 +42,17 @@ function DataFormatter(coinData: RawCoinData): FormattedCoinData {
         }
       },
       {
+        id: 'price',
         caption: columnCaptions.price,
         value: `$${coinData.current_price.toLocaleString('en-us')}`
       },
       {
+        id: 'priceChange',
         caption: columnCaptions.priceChangeDaily,
         value: coinData.price_change_percentage_24h.toFixed(2)
       },
       {
+        id: 'marketCap',
         caption: columnCaptions.marketCap,
         value: `$${coinData.market_cap.toLocaleString('en-us')}`
       }

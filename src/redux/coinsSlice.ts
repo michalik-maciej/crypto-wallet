@@ -6,4 +6,8 @@ export const getCoinsData = (state: AppState) =>
     ? state.coingeckoApi.queries.getAllCoins.data
     : []
 
-export default getCoinsData
+export const getCoinById = (coinId: string | undefined, state: AppState) => {
+  return state.coingeckoApi.queries.getAllCoins.data.filter(
+    (coin) => coin.id === coinId
+  )
+}

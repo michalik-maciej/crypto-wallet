@@ -3,18 +3,21 @@ import TableCell from '@mui/material/TableCell'
 import Avatar from '@mui/material/Avatar'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
-import { CoinNameDataType } from '../DataFormatter/DataFormatter'
+import { Link } from 'react-router-dom'
+import { CoinNameDataType } from './DataFormatter'
 
 interface DataTableCellProps {
   value: number | string | CoinNameDataType
   isHeader: boolean
   isHideable: boolean
+  href: string
 }
 
 function CoinDataTableCell({
   value,
   isHeader,
-  isHideable
+  isHideable,
+  href
 }: DataTableCellProps) {
   let customStyle = {}
 
@@ -34,17 +37,19 @@ function CoinDataTableCell({
     const { image, name, symbol } = value
     return (
       <TableCell>
-        <Stack direction="row" alignItems="center" spacing={2}>
-          <Avatar
-            src={image}
-            sx={{ height: '1.5rem', width: '1.5rem' }}
-            alt={`${name} logo`}
-          />
-          <Box sx={{ width: '40%', display: { xs: 'none', md: 'block' } }}>
-            {name}
-          </Box>
-          <Box sx={{ fontWeight: 600 }}>{symbol}</Box>
-        </Stack>
+        <Link to={href}>
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Avatar
+              src={image}
+              sx={{ height: '1.5rem', width: '1.5rem' }}
+              alt={`${name} logo`}
+            />
+            <Box sx={{ width: '40%', display: { xs: 'none', md: 'block' } }}>
+              {name}
+            </Box>
+            <Box sx={{ fontWeight: 600 }}>{symbol}</Box>
+          </Stack>
+        </Link>
       </TableCell>
     )
   }

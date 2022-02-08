@@ -3,11 +3,11 @@ import Table from '@mui/material/Table'
 import TableRow from '@mui/material/TableRow'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
-import shortid from 'shortid'
 import { useGetAllCoinsQuery } from '../../../services/coingecko'
-import DataFormatter, { columnCaptions } from '../DataFormatter/DataFormatter'
 import { RawCoinData } from '../../../redux/AppStateModel'
-import DataTableCell from '../DataTableCell/DataTableCell'
+import { mainTableColumnIds } from '../../../settings/settings'
+import DataFormatter from './DataFormatter'
+import TableCell from './TableCell'
 
 function CoinTable() {
   const { isLoading, data: rawCoinsData } = useGetAllCoinsQuery(null)
@@ -22,27 +22,31 @@ function CoinTable() {
     <Table>
       <TableHead>
         <TableRow>
-          {formattedCoinsData[0].data.map((coinData) => (
-            <DataTableCell
-              key={shortid()}
-              value={coinData.caption}
+          {formattedCoinsData[0].data.map(({ id, caption }) => (
+            <TableCell
+              key={id}
+              value={caption}
               isHeader
-              isHideable={coinData.caption === columnCaptions.marketCap}
+              isHideable={id === 'marketCap'}
+              href=""
             />
           ))}
         </TableRow>
       </TableHead>
       <TableBody>
-        {formattedCoinsData.map((coin) => (
-          <TableRow key={coin.id}>
-            {coin.data.map((coinData) => (
-              <DataTableCell
-                key={shortid()}
-                value={coinData.value}
-                isHeader={false}
-                isHideable={coinData.caption === columnCaptions.marketCap}
-              />
-            ))}
+        {formattedCoinsData.map(({ coinId, data }) => (
+          <TableRow key={coinId}>
+            {data
+              .filter((item) => mainTableColumnIds.includes(item.id))
+              .map(({ id, value }) => (
+                <TableCell
+                  key={id}
+                  value={value}
+                  isHeader={false}
+                  isHideable={id === 'marketCap'}
+                  href={`/coins/${coinId}`}
+                />
+              ))}
           </TableRow>
         ))}
       </TableBody>
