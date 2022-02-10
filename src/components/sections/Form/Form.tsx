@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Grid from '@mui/material/Grid'
 import MenuItem from '@mui/material/MenuItem'
+import { usePostUserMutation } from '../../../services/local'
 
 interface FormProps {
   symbols: string[]
@@ -13,11 +14,16 @@ interface FormProps {
 function Form() {
   const [spendCurrency, setSpendCurrency] = useState('USD')
   const [receiveCurrency, setReceiveCurrency] = useState('BTC')
+  const [PostUser] = usePostUserMutation()
+
   return (
     <Box
       component="form"
       noValidate
-      onSubmit={(event: React.FormEvent) => event.preventDefault()}
+      onSubmit={(event: React.FormEvent) => {
+        event.preventDefault()
+        PostUser({ email: 'test@email', password: '' })
+      }}
     >
       <Grid container spacing={2}>
         <Grid item xs={6}>
@@ -43,7 +49,7 @@ function Form() {
           </Select>
         </Grid>
         <Grid item>
-          <Button size="small" variant="contained">
+          <Button type="submit" size="small" variant="contained">
             Add Transaction
           </Button>
         </Grid>

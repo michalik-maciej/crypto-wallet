@@ -1,5 +1,6 @@
 export interface UserState {
   logged: boolean
+  email: string | null
 }
 
 export interface RawCoinData {
@@ -32,6 +33,7 @@ export interface RawCoinData {
 }
 
 interface AppState {
+  status: string
   user: UserState
   coingeckoApi: {
     queries: { getAllCoins: { status: string; data: RawCoinData[] } }

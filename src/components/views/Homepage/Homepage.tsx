@@ -2,7 +2,7 @@ import React from 'react'
 import { styled } from '@mui/material/styles'
 import TableContainer from '@mui/material/TableContainer'
 import Hero from '../../features/Hero/Hero'
-
+import Header from '../../features/Header/Header'
 import CoinTable from '../../features/MainTable/MainTable'
 
 function Homepage() {
@@ -16,6 +16,7 @@ function Homepage() {
     <>
       <Hero />
       <StyledContainer>
+        <Header />
         <CoinTable />
       </StyledContainer>
     </>

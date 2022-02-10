@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { coingeckoApi } from '../services/coingecko'
+import { localApi } from '../services/local'
 import userReducer from './userSlice'
 
 export const store = configureStore({
   reducer: {
     user: userReducer,
-    [coingeckoApi.reducerPath]: coingeckoApi.reducer
+    [coingeckoApi.reducerPath]: coingeckoApi.reducer,
+    [localApi.reducerPath]: localApi.reducer
   }
 })
 
