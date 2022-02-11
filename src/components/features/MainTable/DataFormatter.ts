@@ -1,4 +1,4 @@
-import { RawCoinData } from '../../../redux/AppStateModel'
+import { RawCoinData } from '../../../redux/coins/types'
 
 export type CoinNameDataType = {
   image: string
