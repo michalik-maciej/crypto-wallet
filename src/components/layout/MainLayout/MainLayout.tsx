@@ -5,7 +5,7 @@ interface MainLayoutProps {
   children: React.ReactNode
 }
 
-function MainLayout({ children }: MainLayoutProps) {
+export default function MainLayout({ children }: MainLayoutProps) {
   return (
     <>
       {/* <Header /> */}
@@ -14,5 +14,3 @@ function MainLayout({ children }: MainLayoutProps) {
     </>
   )
 }
-
-export default MainLayout

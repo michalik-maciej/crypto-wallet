@@ -13,7 +13,7 @@ interface DataTableCellProps {
   href: string
 }
 
-function CoinDataTableCell({
+export default function CoinDataTableCell({
   value,
   isHeader,
   isHideable,
@@ -55,5 +55,3 @@ function CoinDataTableCell({
   }
   return null
 }
-
-export default CoinDataTableCell

@@ -1,61 +1,63 @@
 import React, { useState } from 'react'
-import Box from '@mui/material/Box'
-import TextField from '@mui/material/TextField'
-import Button from '@mui/material/Button'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import Grid from '@mui/material/Grid'
-import MenuItem from '@mui/material/MenuItem'
-import { usePostUserMutation } from '../../../services/local'
+import { Box, Button, Grid } from '@mui/material'
+import { useForm, Controller } from 'react-hook-form'
+import RadioInput from '../../common/RadioInput/RadioInput'
+import TextInput from '../../common/TextInput/TextInput'
 
-interface FormProps {
-  symbols: string[]
+export interface FormProps {
+  id: string
+  price: number
+  name: string
+  symbol: string
+  logo: string
 }
 
-function Form() {
-  const [spendCurrency, setSpendCurrency] = useState('USD')
-  const [receiveCurrency, setReceiveCurrency] = useState('BTC')
-  const [PostUser] = usePostUserMutation()
+export default function Form({ id, logo, name, price, symbol }: FormProps) {
+  const [coinAmount, setCoinAmount] = useState(1)
+  const [coinPrice, setCoinPrice] = useState(price)
+  const { register, handleSubmit } = useForm()
 
+  console.log(id, logo, name, symbol)
   return (
     <Box
       component="form"
       noValidate
-      onSubmit={(event: React.FormEvent) => {
-        event.preventDefault()
-        PostUser({ email: 'test@email', password: '' })
-      }}
+      onSubmit={handleSubmit((data) => console.log(data))}
     >
       <Grid container spacing={2}>
-        <Grid item xs={6}>
-          <Select
-            autoWidth
-            value={spendCurrency}
-            onChange={(event: SelectChangeEvent) =>
-              setSpendCurrency(event.target.value)
-            }
-          >
-            <MenuItem value="USD">USD</MenuItem>
-          </Select>
+        <Grid item xs={12} sm={6}>
+          <RadioInput
+            groupName="transactionTypes"
+            labels={['deposit', 'withdraw']}
+          />
         </Grid>
-        <Grid item xs={6}>
-          <Select
-            autoWidth
-            value={receiveCurrency}
-            onChange={(event: SelectChangeEvent) =>
-              setReceiveCurrency(event.target.value)
-            }
-          >
-            <MenuItem value="BTC">BTC</MenuItem>
-          </Select>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            id="input-amount"
+            adornment=""
+            label={`${symbol} quantity`}
+            value={coinAmount}
+            setValue={setCoinAmount}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6}>
+          <TextInput
+            id="input-price"
+            adornment="$"
+            label="Price per coin"
+            value={coinPrice}
+            setValue={setCoinPrice}
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} sx={{ fontWeight: 'bold' }}>
+          Total: ${(coinAmount * coinPrice).toLocaleString('en-us')}
         </Grid>
         <Grid item>
-          <Button type="submit" size="small" variant="contained">
-            Add Transaction
+          <Button type="submit" variant="contained">
+            Add transaction
           </Button>
         </Grid>
       </Grid>
     </Box>
   )
 }
-
-export default Form

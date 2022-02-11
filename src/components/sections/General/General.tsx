@@ -7,7 +7,7 @@ interface GeneralProps {
   data: any
 }
 
-function General({ data }: GeneralProps) {
+export default function General({ data }: GeneralProps) {
   const { logo, name, symbol } = data
 
   return (
@@ -22,5 +22,3 @@ function General({ data }: GeneralProps) {
     </Stack>
   )
 }
-
-export default General

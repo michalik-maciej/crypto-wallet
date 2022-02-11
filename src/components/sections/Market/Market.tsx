@@ -4,8 +4,6 @@ interface PriceProps {
   children: React.ReactNode
 }
 
-function Price({ children }: PriceProps) {
+export default function Market({ children }: PriceProps) {
   return <div>{children}</div>
 }
-
-export default Price

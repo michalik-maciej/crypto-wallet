@@ -1,4 +1,4 @@
-import { RawCoinData } from '../../../redux/AppStateModel'
+import { RawCoinData } from '../../../redux/coins/types'
 
 export type CoinNameDataType = {
   image: string
@@ -23,7 +23,9 @@ export const columnCaptions = {
   marketCap: 'Market Cap'
 }
 
-function DataFormatter(coinData: RawCoinData): FormattedCoinData {
+export default function DataFormatter(
+  coinData: RawCoinData
+): FormattedCoinData {
   return {
     coinId: coinData.id,
     data: [
@@ -59,5 +61,3 @@ function DataFormatter(coinData: RawCoinData): FormattedCoinData {
     ]
   }
 }
-
-export default DataFormatter

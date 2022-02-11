@@ -15,8 +15,6 @@ const StyledGrid = styled(Grid)({
   zIndex: -100
 })
 
-function Hero() {
+export default function Hero() {
   return <StyledGrid container />
 }
-
-export default Hero

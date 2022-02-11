@@ -1,14 +1,17 @@
-import { RawCoinData } from '../../../redux/AppStateModel'
+import { RawCoinData } from '../../../redux/coins/types'
+import { FormProps } from '../../sections/Form/Form'
 
-interface DataFormatterProps {
+export interface DataFormatterProps {
   coinId: string
   general: { name: string; symbol: string; logo: string; rank: number }
   market: { price: number; priceChange: number }
-  form: { price: number }
+  form: FormProps
   chart: { price: number }
 }
 
-function DataFormatter(coinData: RawCoinData) {
+export default function DataFormatter(
+  coinData: RawCoinData
+): DataFormatterProps {
   return {
     coinId: coinData.id,
     general: {
@@ -22,12 +25,14 @@ function DataFormatter(coinData: RawCoinData) {
       priceChange: coinData.price_change_percentage_24h
     },
     form: {
-      price: coinData.current_price
+      id: coinData.id,
+      price: coinData.current_price,
+      name: coinData.name,
+      symbol: coinData.symbol.toUpperCase(),
+      logo: coinData.image
     },
     chart: {
       price: coinData.current_price
     }
   }
 }
-
-export default DataFormatter

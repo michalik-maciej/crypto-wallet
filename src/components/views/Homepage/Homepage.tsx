@@ -3,9 +3,9 @@ import { styled } from '@mui/material/styles'
 import TableContainer from '@mui/material/TableContainer'
 import Hero from '../../features/Hero/Hero'
 import Header from '../../features/Header/Header'
-import CoinTable from '../../features/MainTable/MainTable'
+import MainTable from '../../features/MainTable/MainTable'
 
-function Homepage() {
+export default function Homepage() {
   const StyledContainer = styled(TableContainer)({
     height: '100vh',
     margin: '2rem auto',
@@ -17,10 +17,8 @@ function Homepage() {
       <Hero />
       <StyledContainer>
         <Header />
-        <CoinTable />
+        <MainTable />
       </StyledContainer>
     </>
   )
 }
-
-export default Homepage

@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
-import { RawCoinData } from '../../../redux/AppStateModel'
+import { RawCoinData } from '../../../redux/coins/types'
 import {
   useGetAllCoinsQuery,
   useGetCoinByIdQuery
@@ -13,32 +13,39 @@ import General from '../../sections/General/General'
 import Chart from '../../sections/Chart/Chart'
 import Form from '../../sections/Form/Form'
 import Market from '../../sections/Market/Market'
-import DataFormatter from './DataFormatter'
+import DataFormatter, { DataFormatterProps } from './DataFormatter'
 
 type CoinPageParams = {
   coinId: string
 }
 
-function CoinPage() {
+export default function CoinPage() {
   const { coinId } = useParams<CoinPageParams>()
-  const { data } = useGetAllCoinsQuery(null)
-  const selectedCoin = DataFormatter(
-    data.find((coin: RawCoinData) => coin.id === coinId)
-  )
+  const { data: rawCoinsData } = useGetAllCoinsQuery<{
+    data: RawCoinData[]
+  }>(null)
+
+  const currentCoinRaw = rawCoinsData.find((coin) => coin.id === coinId)
+  let currentCoin
+  if (!currentCoinRaw) {
+    currentCoin = DataFormatter(rawCoinsData[0])
+  } else {
+    currentCoin = DataFormatter(currentCoinRaw)
+  }
 
   const StyledPaper = styled(Paper)({
     display: 'flex',
-    height: '300px',
+    height: '600px',
     padding: '2rem',
     margin: '0 2rem',
     flexDirection: 'column'
   })
 
-  const { general, form, market, chart } = selectedCoin
+  const { general, form, market, chart } = currentCoin
   const sections = [
     // { id: 'general', component: <General data={general} /> },
     // { id: 'market', component: <Market>price</Market> },
-    { id: 'form', component: <Form /> }
+    { id: 'form', component: <Form {...form} /> }
     // { id: 'chart', component: <Chart>chart</Chart> }
   ]
 
@@ -54,5 +61,3 @@ function CoinPage() {
     </Container>
   )
 }
-
-export default CoinPage

@@ -4,19 +4,18 @@ import TableRow from '@mui/material/TableRow'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
 import { useGetAllCoinsQuery } from '../../../services/coingecko'
-import { RawCoinData } from '../../../redux/AppStateModel'
+import { RawCoinData } from '../../../redux/coins/types'
 import { mainTableColumnIds } from '../../../settings/settings'
 import DataFormatter from './DataFormatter'
 import TableCell from './TableCell'
 
-function CoinTable() {
-  const { isLoading, data: rawCoinsData } = useGetAllCoinsQuery(null)
+export default function MainTable() {
+  const { isLoading, data: rawCoinsData } =
+    useGetAllCoinsQuery<{ isLoading: boolean; data: RawCoinData[] }>(null)
 
   if (isLoading) return <div>Loading...</div>
 
-  const formattedCoinsData = (rawCoinsData as RawCoinData[]).map((coin) =>
-    DataFormatter(coin)
-  )
+  const formattedCoinsData = rawCoinsData.map((coin) => DataFormatter(coin))
 
   return (
     <Table>
@@ -53,5 +52,3 @@ function CoinTable() {
     </Table>
   )
 }
-
-export default CoinTable
