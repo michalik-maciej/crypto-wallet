@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
-import { RawCoinData } from '../../../redux/AppStateModel'
+import { RawCoinData } from '../../../redux/coins/types'
 import {
   useGetAllCoinsQuery,
   useGetCoinByIdQuery

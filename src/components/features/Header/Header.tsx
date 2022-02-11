@@ -4,13 +4,13 @@ import { styled } from '@mui/material/styles'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import { useForm } from 'react-hook-form'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../../../redux/hooks'
 import { usePostUserMutation } from '../../../services/local'
-import { logUser } from '../../../redux/userSlice'
+import { requestLogin } from '../../../redux/user/requestLogin'
 
 function Header() {
   const [PostUser] = usePostUserMutation()
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -28,8 +28,7 @@ function Header() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    // PostUser({ email: 'test@email', password: '123' })
-    logUser()
+    dispatch(requestLogin({ email, password }))
   }
 
   return (
@@ -43,7 +42,7 @@ function Header() {
         <TextField
           name="email"
           label="Email address"
-          // autoComplete="email"
+          autoComplete="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
         />
@@ -51,7 +50,7 @@ function Header() {
           name="password"
           label="Password"
           type="password"
-          // autoComplete="current-password"
+          autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
         />

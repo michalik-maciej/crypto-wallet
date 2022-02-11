@@ -1,8 +1,3 @@
-export interface UserState {
-  logged: boolean
-  email: string | null
-}
-
 export interface RawCoinData {
   id: string
   symbol: string
@@ -31,13 +26,3 @@ export interface RawCoinData {
   roi: { times: number; currency: string; percentage: number } | null
   last_updated: string
 }
-
-interface AppState {
-  status: string
-  user: UserState
-  coingeckoApi: {
-    queries: { getAllCoins: { status: string; data: RawCoinData[] } }
-  }
-}
-
-export default AppState

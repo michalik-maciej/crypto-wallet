@@ -69,6 +69,7 @@
         }
       ],
       "no-param-reassign": ["warn", { "props": false }],
+      "import/no-cycle": 0,
       "semi": 0
     }
 }
