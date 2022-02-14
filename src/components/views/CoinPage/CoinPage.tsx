@@ -12,6 +12,8 @@ import {
 import General from '../../sections/General/General'
 import Chart from '../../sections/Chart/Chart'
 import Form from '../../sections/Form/Form'
+import FormTest from '../../sections/Form/FormTest'
+
 import Market from '../../sections/Market/Market'
 import DataFormatter, { DataFormatterProps } from './DataFormatter'
 
@@ -46,6 +48,7 @@ export default function CoinPage() {
     // { id: 'general', component: <General data={general} /> },
     // { id: 'market', component: <Market>price</Market> },
     { id: 'form', component: <Form {...form} /> }
+    // { id: 'testform', component: <FormTest /* {...form} */ /> }
     // { id: 'chart', component: <Chart>chart</Chart> }
   ]
 
