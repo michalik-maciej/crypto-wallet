@@ -1,11 +1,10 @@
 import { RawCoinData } from '../../../redux/coins/types'
-import { FormProps } from '../../sections/Form/Form'
 
 export interface DataFormatterProps {
   coinId: string
   general: { name: string; symbol: string; logo: string; rank: number }
   market: { price: number; priceChange: number }
-  form: FormProps
+  form: any
   chart: { price: number }
 }
 

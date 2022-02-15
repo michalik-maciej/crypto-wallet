@@ -1,7 +1,6 @@
-import React from 'react'
-import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
+import Stack from '@mui/material/Stack'
 
 interface GeneralProps {
   data: any

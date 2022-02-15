@@ -1,8 +1,7 @@
-import React from 'react'
-import { styled } from '@mui/material/styles'
 import TableContainer from '@mui/material/TableContainer'
-import Hero from '../../features/Hero/Hero'
+import { styled } from '@mui/material/styles'
 import Header from '../../features/Header/Header'
+import Hero from '../../features/Hero/Hero'
 import MainTable from '../../features/MainTable/MainTable'
 
 export default function Homepage() {

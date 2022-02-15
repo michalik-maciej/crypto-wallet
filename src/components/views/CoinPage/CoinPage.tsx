@@ -1,21 +1,18 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
+import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
+import { useParams } from 'react-router-dom'
+import Chart from '../../sections/Chart/Chart'
+import Form from '../../sections/Form/Form'
+import General from '../../sections/General/General'
+import Market from '../../sections/Market/Market'
 import { RawCoinData } from '../../../redux/coins/types'
 import {
   useGetAllCoinsQuery,
   useGetCoinByIdQuery
 } from '../../../services/coingecko'
-import General from '../../sections/General/General'
-import Chart from '../../sections/Chart/Chart'
-import Form from '../../sections/Form/Form'
-import FormTest from '../../sections/Form/FormTest'
-
-import Market from '../../sections/Market/Market'
-import DataFormatter, { DataFormatterProps } from './DataFormatter'
+import DataFormatter from './DataFormatter'
 
 type CoinPageParams = {
   coinId: string
@@ -48,7 +45,6 @@ export default function CoinPage() {
     // { id: 'general', component: <General data={general} /> },
     // { id: 'market', component: <Market>price</Market> },
     { id: 'form', component: <Form {...form} /> }
-    // { id: 'testform', component: <FormTest /* {...form} */ /> }
     // { id: 'chart', component: <Chart>chart</Chart> }
   ]
 

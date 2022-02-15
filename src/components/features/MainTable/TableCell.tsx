@@ -1,9 +1,8 @@
-import React from 'react'
-import TableCell from '@mui/material/TableCell'
 import Avatar from '@mui/material/Avatar'
-import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
 import { Link } from 'react-router-dom'
+import Stack from '@mui/material/Stack'
+import TableCell from '@mui/material/TableCell'
 import { CoinNameDataType } from './DataFormatter'
 
 interface DataTableCellProps {

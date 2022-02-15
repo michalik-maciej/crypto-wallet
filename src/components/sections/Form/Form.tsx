@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import * as yup from 'yup'
 import { Box, Button, Grid } from '@mui/material'
 import { FormProvider, useForm } from 'react-hook-form'
+import { yupResolver } from '@hookform/resolvers/yup'
 import RadioInput from '../../common/RadioInput/RadioInput'
 import TextInput from '../../common/TextInput/TextInput'
 
-export interface FormProps {
+export interface IFormProps {
   id: string
   price: number
   name: string
@@ -12,10 +14,26 @@ export interface FormProps {
   logo: string
 }
 
-export default function Form({ price, symbol }: FormProps) {
+interface IFormInputs {
+  pricePerCoin: number
+  coinQuantity: number
+  transactionType: string
+}
+
+const validationSchema = yup.object().shape({
+  pricePerCoin: yup.number().positive().required(),
+  coinQuantity: yup.number().positive().required(),
+  transactionType: yup.string().required()
+})
+
+export default function Form({ price, symbol }: IFormProps) {
   const [coinAmount, setCoinAmount] = useState(1)
   const [coinPrice, setCoinPrice] = useState(price)
-  const methods = useForm()
+  const methods = useForm<IFormInputs>({
+    resolver: yupResolver(validationSchema)
+  })
+
+  console.log('errors: ', methods.formState.errors)
 
   return (
     <FormProvider {...methods}>
@@ -33,7 +51,7 @@ export default function Form({ price, symbol }: FormProps) {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput
-              id="inputAmount"
+              id="coinQuantity"
               adornment=""
               label={`${symbol} quantity`}
               value={coinAmount}
@@ -42,7 +60,7 @@ export default function Form({ price, symbol }: FormProps) {
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput
-              id="inputPrice"
+              id="pricePerCoin"
               adornment="$"
               label="Price per coin"
               value={coinPrice}

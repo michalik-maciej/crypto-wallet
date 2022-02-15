@@ -1,13 +1,12 @@
-import React from 'react'
 import Table from '@mui/material/Table'
-import TableRow from '@mui/material/TableRow'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
-import { useGetAllCoinsQuery } from '../../../services/coingecko'
+import TableRow from '@mui/material/TableRow'
 import { RawCoinData } from '../../../redux/coins/types'
 import { mainTableColumnIds } from '../../../settings/settings'
-import DataFormatter from './DataFormatter'
+import { useGetAllCoinsQuery } from '../../../services/coingecko'
 import TableCell from './TableCell'
+import DataFormatter from './DataFormatter'
 
 export default function MainTable() {
   const { isLoading, data: rawCoinsData } =

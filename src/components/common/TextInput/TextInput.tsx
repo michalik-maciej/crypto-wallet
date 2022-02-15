@@ -1,11 +1,10 @@
-import React from 'react'
 import {
-  InputAdornment,
   FormControl,
-  OutlinedInput,
-  InputLabel
+  InputAdornment,
+  InputLabel,
+  OutlinedInput
 } from '@mui/material'
-import ConnectForm from '../../features/ConnectForm/ConnectForm'
+import { useFormContext } from 'react-hook-form'
 
 interface TextInputProps {
   adornment: string
@@ -22,28 +21,33 @@ export default function TextInput({
   label,
   setValue
 }: TextInputProps) {
+  const {
+    register,
+    formState: { errors }
+  } = useFormContext()
+
   return (
-    <ConnectForm>
-      {({ register }: any) => (
-        <FormControl fullWidth sx={{ m: 1 }}>
-          <InputLabel htmlFor={id}>{label}</InputLabel>
-          <OutlinedInput
-            {...register(id)}
-            id={id}
-            type="number"
-            inputProps={{ min: 0 }}
-            value={value}
-            onChange={(event) =>
-              !Number.isNaN(parseFloat(event.target.value)) &&
-              setValue(parseFloat(event.target.value))
-            }
-            startAdornment={
-              <InputAdornment position="start">{adornment}</InputAdornment>
-            }
-            label={label}
-          />
-        </FormControl>
-      )}
-    </ConnectForm>
+    <FormControl fullWidth sx={{ m: 1 }}>
+      <InputLabel htmlFor={id}>{label}</InputLabel>
+      <OutlinedInput
+        {...register(id)}
+        id={id}
+        type="number"
+        inputProps={{ min: 0 }}
+        value={value}
+        error={!!errors[id]}
+        onChange={(event) =>
+          setValue(
+            parseFloat(event.target.value) > 0
+              ? parseFloat(event.target.value)
+              : 0
+          )
+        }
+        startAdornment={
+          <InputAdornment position="start">{adornment}</InputAdornment>
+        }
+        label={label}
+      />
+    </FormControl>
   )
 }
