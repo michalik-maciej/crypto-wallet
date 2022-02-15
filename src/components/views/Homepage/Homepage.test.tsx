@@ -1,5 +1,5 @@
-import React from 'react'
 import { render, screen } from '@testing-library/react'
+
 import Homepage from './Homepage'
 
 test('Homepage contains correct title', () => {

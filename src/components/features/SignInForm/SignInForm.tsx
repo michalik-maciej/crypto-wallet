@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
+import Button from '@mui/material/Button'
 import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import { useForm } from 'react-hook-form'
 import { styled } from '@mui/material/styles'
-import Button from '@mui/material/Button'
-import { useAppDispatch } from '../../../redux/hooks'
-import { requestLogin } from '../../../redux/user/requestLogin'
+import { useForm } from 'react-hook-form'
 import { UserCredentials } from '../../../redux/user/types'
+import { requestLogin } from '../../../redux/user/requestLogin'
+import { useAppDispatch } from '../../../redux/hooks'
 
-function LoginForm() {
+export default function SignInForm() {
   const { register, handleSubmit } = useForm<UserCredentials>()
   const dispatch = useAppDispatch()
   const [email, setEmail] = useState('')
@@ -46,5 +46,3 @@ function LoginForm() {
     </Stack>
   )
 }
-
-export default LoginForm
