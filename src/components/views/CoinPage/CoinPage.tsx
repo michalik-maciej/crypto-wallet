@@ -2,11 +2,12 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
-import { RawCoinData } from '../../../redux/coins/types'
-import {
-  useGetAllCoinsQuery,
-  useGetCoinByIdQuery
-} from '../../../services/coingecko'
+import { Link, useParams } from 'react-router-dom'
+import Button from '@mui/material/Button'
+import { IRawCoinData } from '../../../redux/coins/types'
+import { useGetAllCoinsQuery } from '../../../services/coingecko'
+import Market from '../../sections/Market/Market'
+import Form from '../../sections/Form/Form'
 import DataFormatter from './DataFormatter'
 
 type CoinPageParams = {

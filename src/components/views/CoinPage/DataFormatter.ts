@@ -1,4 +1,4 @@
-import { RawCoinData } from '../../../redux/coins/types'
+import { IRawCoinData } from '../../../redux/coins/types'
 
 export interface DataFormatterProps {
   coinId: string
@@ -14,7 +14,9 @@ export interface DataFormatterProps {
   chart: { price: number }
 }
 
-function DataFormatter(coinData: RawCoinData): DataFormatterProps {
+export default function DataFormatter(
+  coinData: IRawCoinData
+): DataFormatterProps {
   return {
     coinId: coinData.id,
     market: {

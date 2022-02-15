@@ -72,46 +72,11 @@
         "pathGroupsExcludedImportTypes": ["react"]
       }
     ],
-    "rules": {
-      "prettier/prettier": [
-        "error",
-        {
-          "endOfLine": "auto",
-          "trailingComma": "none"
-        }
-      ],
-      "react/jsx-filename-extension": [
-        2,
-        { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
-      ],
-      "no-unused-vars": "warn",
-      "linebreak-style": ["error", "windows"],
-      "import/extensions": [
-        0,
-        "ignorePackages",
-        {
-          "js": "never",
-          "jsx": "never",
-          "ts": "never",
-          "tsx": "never"
-        }
-     ],
-      "import/order": [
-        "error",
-        {
-          "pathGroups": [
-            {
-              "pattern": "react",
-              "group": "builtin",
-              "position": "before"
-            }
-          ],
-          "pathGroupsExcludedImportTypes": ["react"]
-        }
-      ],
-      "no-param-reassign": ["warn", { "props": false }],
-      "import/no-cycle": 0,
-      "semi": 0
-    }
+    "no-param-reassign": ["warn", { "props": false }],
+    "import/no-cycle": 0,
+    "react/jsx-props-no-spreading": 0,
+    "semi": 0,
+    "react/react-in-jsx-scope": 0,
+    "react/jsx-uses-react": 0
   }
 }

@@ -4,12 +4,10 @@ import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
 import { styled } from '@mui/material/styles'
 import { useForm } from 'react-hook-form'
-import { UserCredentials } from '../../../redux/user/types'
-import { requestLogin } from '../../../redux/user/requestLogin'
 import { useAppDispatch } from '../../../redux/hooks'
 
 export default function SignInForm() {
-  const { register, handleSubmit } = useForm<UserCredentials>()
+  const { register, handleSubmit } = useForm()
   const dispatch = useAppDispatch()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -22,7 +20,7 @@ export default function SignInForm() {
     <Stack
       direction="row"
       component="form"
-      onSubmit={handleSubmit((data) => dispatch(requestLogin(data)))}
+      onSubmit={handleSubmit((data) => console.log(data))}
       spacing={1}
     >
       <TextField
