@@ -36,6 +36,7 @@ export default function Form({ price, symbol }: IFormProps) {
   console.log('errors: ', methods.formState.errors)
 
   return (
+    // eslint-disable-next-line react/jsx-props-no-spreading
     <FormProvider {...methods}>
       <Box
         component="form"

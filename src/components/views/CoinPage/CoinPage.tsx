@@ -2,13 +2,7 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
-import { useParams, Link } from 'react-router-dom'
-import Button from '@mui/material/Button'
-import Chart from '../../sections/Chart/Chart'
-import Form from '../../sections/Form/Form'
-import Market from '../../sections/Market/Market'
-
-import { IRawCoinData } from '../../../redux/coins/types'
+import { RawCoinData } from '../../../redux/coins/types'
 import {
   useGetAllCoinsQuery,
   useGetCoinByIdQuery
