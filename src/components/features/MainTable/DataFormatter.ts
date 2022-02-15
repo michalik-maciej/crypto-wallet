@@ -1,4 +1,4 @@
-import { IRawCoinData } from '../../../redux/coins/types'
+import { RawCoinData } from '../../../redux/coins/types'
 
 interface IFormattedCoinData {
   coinId: string

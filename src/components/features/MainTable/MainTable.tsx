@@ -10,6 +10,8 @@ import TableCell from '@mui/material/TableCell'
 import { useTheme } from '@mui/material'
 import { IRawCoinData } from '../../../redux/coins/types'
 import { useGetAllCoinsQuery } from '../../../services/coingecko'
+import { RawCoinData } from '../../../redux/coins/types'
+import { mainTableColumnIds } from '../../../settings/settings'
 import DataFormatter from './DataFormatter'
 
 export default function MainTable() {

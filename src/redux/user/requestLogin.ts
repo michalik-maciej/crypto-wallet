@@ -1,34 +1,27 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import Axios, { AxiosResponse, AxiosError } from 'axios'
-import { UserCredentials } from './types'
+import Axios from 'axios'
+
+interface ResponseMessage {
+  message: string
+}
+
+interface UserCredentials {
+  email: string
+  password: string
+}
 
 /* thunk creators */
-export const requestLogin = createAsyncThunk(
+export const requestLogin = createAsyncThunk<ResponseMessage, UserCredentials>(
   'user/login',
-  async (payload: UserCredentials, { rejectWithValue }) => {
-    let finalResponse
+  async (payload) => {
     try {
-      const response = (await Axios.post(
+      const response = await Axios.post<ResponseMessage>(
         `http://localhost:8011/api/user/login`,
         payload
-      )) as AxiosResponse
-
-      finalResponse = {
-        status: response.status,
-        message: response.data.message
-      }
-      return finalResponse
-    } catch (err) {
-      const error = err as AxiosError
-
-      if (error.response) {
-        finalResponse = {
-          status: error.response.status,
-          message: error.response.data.message
-        }
-        return rejectWithValue(finalResponse)
-      }
-      return { status: undefined, message: error }
+      )
+      return response
+    } catch (err: any) {
+      return err
     }
   }
 )

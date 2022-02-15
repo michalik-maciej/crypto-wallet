@@ -74,9 +74,6 @@
       ],
       "no-param-reassign": ["warn", { "props": false }],
       "import/no-cycle": 0,
-      "react/jsx-props-no-spreading": 0,
-      "semi": 0,
-      "react/react-in-jsx-scope": 0,
-      "react/jsx-uses-react": 0
+      "semi": 0
     }
 }
