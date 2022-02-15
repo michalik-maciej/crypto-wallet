@@ -2,12 +2,13 @@ import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
+import Button from '@mui/material/Button'
 import Chart from '../../sections/Chart/Chart'
 import Form from '../../sections/Form/Form'
-import General from '../../sections/General/General'
 import Market from '../../sections/Market/Market'
-import { RawCoinData } from '../../../redux/coins/types'
+
+import { IRawCoinData } from '../../../redux/coins/types'
 import {
   useGetAllCoinsQuery,
   useGetCoinByIdQuery
@@ -21,7 +22,7 @@ type CoinPageParams = {
 export default function CoinPage() {
   const { coinId } = useParams<CoinPageParams>()
   const { data: rawCoinsData } = useGetAllCoinsQuery<{
-    data: RawCoinData[]
+    data: IRawCoinData[]
   }>(null)
 
   const currentCoinRaw = rawCoinsData.find((coin) => coin.id === coinId)
@@ -34,23 +35,24 @@ export default function CoinPage() {
 
   const StyledPaper = styled(Paper)({
     display: 'flex',
-    height: '600px',
     padding: '2rem',
     margin: '0 2rem',
     flexDirection: 'column'
   })
 
-  const { general, form, market, chart } = currentCoin
+  const { form, market, chart } = currentCoin
   const sections = [
-    // { id: 'general', component: <General data={general} /> },
-    // { id: 'market', component: <Market>price</Market> },
+    { id: 'market', component: <Market data={market} /> },
     { id: 'form', component: <Form {...form} /> }
     // { id: 'chart', component: <Chart>chart</Chart> }
   ]
 
   return (
     <Container>
-      <Grid container spacing={4} mt={4}>
+      <Button variant="contained" component={Link} to="/">
+        Back
+      </Button>
+      <Grid container spacing={1} mt={4}>
         {sections.map(({ id, component }) => (
           <Grid key={id} item xs={12} md={6}>
             <StyledPaper>{component}</StyledPaper>

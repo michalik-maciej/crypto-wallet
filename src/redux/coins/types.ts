@@ -1,4 +1,4 @@
-export interface RawCoinData {
+export interface IRawCoinData {
   id: string
   symbol: string
   name: string

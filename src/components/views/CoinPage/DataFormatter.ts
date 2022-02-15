@@ -1,27 +1,34 @@
-import { RawCoinData } from '../../../redux/coins/types'
+import { IRawCoinData } from '../../../redux/coins/types'
 
 export interface DataFormatterProps {
   coinId: string
-  general: { name: string; symbol: string; logo: string; rank: number }
-  market: { price: number; priceChange: number }
+  market: {
+    name: string
+    symbol: string
+    logo: string
+    rank: string
+    price: number | string
+    priceChange: { label: string; positive: boolean }
+  }
   form: any
   chart: { price: number }
 }
 
 export default function DataFormatter(
-  coinData: RawCoinData
+  coinData: IRawCoinData
 ): DataFormatterProps {
   return {
     coinId: coinData.id,
-    general: {
+    market: {
       name: coinData.name,
       symbol: coinData.symbol.toUpperCase(),
       logo: coinData.image,
-      rank: coinData.market_cap_rank
-    },
-    market: {
-      price: coinData.current_price,
-      priceChange: coinData.price_change_percentage_24h
+      rank: `#${coinData.market_cap_rank}`,
+      price: `$${coinData.current_price.toLocaleString('en-us')}`,
+      priceChange: {
+        label: `${coinData.price_change_percentage_24h.toFixed(2)}%`,
+        positive: coinData.price_change_percentage_24h >= 0
+      }
     },
     form: {
       id: coinData.id,
