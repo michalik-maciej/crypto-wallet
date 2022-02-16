@@ -12,8 +12,7 @@ export const coingeckoApi = createApi({
         `coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false`
     }),
     getCoinById: builder.query({
-      query: (coinId) =>
-        `simple/price?ids=${coinId}&vs_currencies=usd&include_market_cap=true&include_24hr_vol=true&include_24hr_change=true&include_last_updated_at=false`
+      query: (coinIds) => `simple/price?ids=${coinIds}&vs_currencies=usd`
     }),
     getCoinChart: builder.query({
       query: (coinId) =>

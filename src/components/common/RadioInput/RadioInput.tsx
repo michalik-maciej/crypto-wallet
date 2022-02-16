@@ -1,6 +1,6 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { useFormContext } from 'react-hook-form'
-import capitalize from '../../../utils/capitalize'
+import { capitalize } from '../../../utils/utils'
 
 interface RadioInputProps {
   groupName: string

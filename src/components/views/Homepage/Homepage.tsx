@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles'
 import Header from '../../features/Header/Header'
 import Hero from '../../features/Hero/Hero'
 import MainTable from '../../features/MainTable/MainTable'
+import Portfolio from '../Portfolio/Portfolio'
 
 export default function Homepage() {
   const StyledContainer = styled(TableContainer)({
@@ -15,8 +16,9 @@ export default function Homepage() {
     <>
       <Hero />
       <StyledContainer>
-        <Header />
-        <MainTable />
+        {/*         <Header /> */}
+        <Portfolio />
+        {/*         <MainTable /> */}
       </StyledContainer>
     </>
   )
