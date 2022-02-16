@@ -5,6 +5,9 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import RadioInput from '../../common/RadioInput/RadioInput'
 import TextInput from '../../common/TextInput/TextInput'
+import { usePostTransactionMutation } from '../../../services/local'
+import { selectUserId } from '../../../redux/user/userSlice'
+import { useAppSelector } from '../../../redux/hooks'
 
 export interface IFormProps {
   id: string
@@ -17,38 +20,46 @@ export interface IFormProps {
 interface IFormInputs {
   pricePerCoin: number
   coinQuantity: number
-  transactionType: string
+  type: string
 }
 
 const validationSchema = yup.object().shape({
   pricePerCoin: yup.number().positive().required(),
   coinQuantity: yup.number().positive().required(),
-  transactionType: yup.string().required()
+  type: yup.string().required()
 })
 
-export default function Form({ price, symbol }: IFormProps) {
+export default function Form({ id, price, symbol }: IFormProps) {
+  const [postTransaction, postTransactionResult] = usePostTransactionMutation()
+  const user = useAppSelector((state) => selectUserId(state))
   const [coinAmount, setCoinAmount] = useState(1)
   const [coinPrice, setCoinPrice] = useState(price)
   const methods = useForm<IFormInputs>({
     resolver: yupResolver(validationSchema)
   })
 
-  console.log('errors: ', methods.formState.errors)
-
   return (
-    // eslint-disable-next-line react/jsx-props-no-spreading
     <FormProvider {...methods}>
       <Box
         component="form"
         noValidate
-        onSubmit={methods.handleSubmit((data) => console.log(data))}
+        onSubmit={methods.handleSubmit((formData) => {
+          if (!user) {
+            console.log('need to login to add transaction!')
+            return
+          }
+          const payload = {
+            ...formData,
+            userId: user,
+            coinId: id,
+            timestamp: Date.now()
+          }
+          postTransaction(payload)
+        })}
       >
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <RadioInput
-              groupName="transactionType"
-              labels={['deposit', 'withdraw']}
-            />
+            <RadioInput groupName="type" labels={['deposit', 'withdraw']} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <TextInput

@@ -5,13 +5,14 @@ import { requestLogin } from './requestLogin'
 
 const initialState = {
   status: 'idle',
-  logged: false,
-  email: null,
+  logged: true,
+  email: 'test@email',
   error: null
 } as UserState
 
 /* selectors */
 export const selectStatus = (state: RootState) => state.user.status
+export const selectUserId = (state: RootState) => state.user.email
 
 /* reducers and actions */
 export const userSlice = createSlice({
