@@ -31,10 +31,7 @@ export default function Portfolio() {
   const { data: currentPrices } = useGetCoinByIdQuery(
     [...new Set(coinIds)].join('%2C')
   )
-
   const formattedCoinsData = dataFormatter({ transactions, currentPrices })
-  console.log('formattedCoinsData: ', formattedCoinsData)
-
   const columnHeaders = [
     { id: 'name', caption: 'Name' },
     { id: 'price', caption: 'Price' },

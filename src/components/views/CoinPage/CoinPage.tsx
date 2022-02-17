@@ -3,7 +3,9 @@ import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
 import { styled } from '@mui/material/styles'
 import { Link, useParams } from 'react-router-dom'
-import Button from '@mui/material/Button'
+import UndoRoundedIcon from '@mui/icons-material/UndoRounded'
+import IconButton from '@mui/material/IconButton'
+import Box from '@mui/material/Box'
 import { IRawCoinData } from '../../../redux/coins/types'
 import { useGetAllCoinsQuery } from '../../../services/coingecko'
 import Market from '../../sections/Market/Market'
@@ -30,8 +32,8 @@ export default function CoinPage() {
 
   const StyledPaper = styled(Paper)({
     display: 'flex',
-    padding: '2rem',
-    margin: '0 2rem',
+    padding: '1.5rem',
+    margin: '0',
     flexDirection: 'column'
   })
 
@@ -44,13 +46,21 @@ export default function CoinPage() {
 
   return (
     <Container>
-      <Button variant="contained" component={Link} to="/">
-        Back
-      </Button>
-      <Grid container spacing={1} mt={4}>
+      <Box sx={{ position: 'absolute', top: 96, right: 16 }}>
+        <Link to="/">
+          <IconButton
+            aria-label="back to homepage"
+            size="small"
+            sx={{ border: '3px solid #666', position: 'right' }}
+          >
+            <UndoRoundedIcon fontSize="inherit" />
+          </IconButton>
+        </Link>
+      </Box>
+      <Grid container spacing={1}>
         {sections.map(({ id, component }) => (
           <Grid key={id} item xs={12} md={6}>
-            <StyledPaper>{component}</StyledPaper>
+            <StyledPaper elevation={3}>{component}</StyledPaper>
           </Grid>
         ))}
       </Grid>

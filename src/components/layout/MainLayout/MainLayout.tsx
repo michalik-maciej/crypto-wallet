@@ -1,15 +1,15 @@
+import Container from '@mui/material/Container'
 import Header from '../../features/Header/Header'
 
-interface MainLayoutProps {
+export default function MainLayout({
+  children
+}: {
   children: React.ReactNode
-}
-
-export default function MainLayout({ children }: MainLayoutProps) {
+}) {
   return (
     <>
-      {/* <Header /> */}
-      {children}
-      {/* <div>footer</div> */}
+      <Header />
+      <Container maxWidth="md">{children}</Container>
     </>
   )
 }

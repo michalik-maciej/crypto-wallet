@@ -1,46 +1,64 @@
 import { useState } from 'react'
 import Button from '@mui/material/Button'
-import Stack from '@mui/material/Stack'
 import TextField from '@mui/material/TextField'
-import { styled } from '@mui/material/styles'
 import { useForm } from 'react-hook-form'
-import { useAppDispatch } from '../../../redux/hooks'
+import Container from '@mui/material/Container'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import { usePostUserMutation } from '../../../services/local'
 
 export default function SignInForm() {
   const { register, handleSubmit } = useForm()
-  const dispatch = useAppDispatch()
+  const [loginUser, returnLoginUser] = usePostUserMutation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const StyledButton = styled(Button)({
-    justifyContent: 'space-around',
-    fontWeight: 'bold'
-  })
 
   return (
-    <Stack
-      direction="row"
-      component="form"
-      onSubmit={handleSubmit((data) => console.log(data))}
-      spacing={1}
-    >
-      <TextField
-        {...register('email')}
-        label="Email address"
-        autoComplete="email"
-        value={email}
-        onChange={(event) => setEmail(event.target.value)}
-      />
-      <TextField
-        {...register('password')}
-        label="Password"
-        type="password"
-        autoComplete="current-password"
-        value={password}
-        onChange={(event) => setPassword(event.target.value)}
-      />
-      <StyledButton variant="contained" type="submit">
-        Login
-      </StyledButton>
-    </Stack>
+    <Container maxWidth="xs">
+      <Box
+        component="form"
+        noValidate
+        onSubmit={handleSubmit((data) => loginUser(data))}
+        sx={{
+          marginTop: 8,
+          paddingLeft: 2,
+          paddingRight: 2,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center'
+        }}
+      >
+        <Typography variant="h5">Sign In</Typography>{' '}
+        <TextField
+          {...register('email')}
+          margin="normal"
+          fullWidth
+          required
+          label="Email address"
+          autoComplete="email"
+          value={email}
+          onChange={(event) => setEmail(event.target.value)}
+        />
+        <TextField
+          {...register('password')}
+          margin="normal"
+          fullWidth
+          required
+          label="Password"
+          type="password"
+          autoComplete="current-password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+        />
+        <Button
+          variant="contained"
+          fullWidth
+          type="submit"
+          sx={{ fontWeight: 600, mt: 2 }}
+        >
+          Login
+        </Button>
+      </Box>
+    </Container>
   )
 }

@@ -16,6 +16,7 @@ export default function RadioInput({ groupName, labels }: RadioInputProps) {
         {labels.map((label) => (
           <FormControlLabel
             {...register(groupName)}
+            key={label}
             value={label.toLowerCase()}
             control={<Radio />}
             label={capitalize(label)}

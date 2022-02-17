@@ -9,7 +9,7 @@ import Box from '@mui/material/Box'
 import TableCell from '@mui/material/TableCell'
 import { useTheme } from '@mui/material'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-
+import ProgressBar from '../ProgressBar/ProgressBar'
 import { IRawCoinData } from '../../../redux/coins/types'
 import { useGetAllCoinsQuery } from '../../../services/coingecko'
 import DataFormatter from './DataFormatter'
@@ -35,11 +35,11 @@ export default function MainTable() {
     { id: 'priceChange', caption: '24h %' },
     { id: 'marketCap', caption: 'Market Cap' }
   ]
-  const formattedCoinsData = rawCoinsData.map((coin) => DataFormatter(coin))
+  const formattedCoinsData = rawCoinsData?.map((coin) => DataFormatter(coin))
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
+      {isLoading && <ProgressBar>Loading</ProgressBar>}
       {error && (
         <div>
           {error.status} {JSON.stringify(error.data)}
