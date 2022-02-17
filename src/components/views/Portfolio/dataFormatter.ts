@@ -10,10 +10,9 @@ export interface ITransactionQuery {
 
 interface ISingleAsset {
   coinId: string
-  holdings: number
+  holdings: { original: number; usd: number }
   netCost: number
   currentPrice: number
-  marketValue: number
   profit: number
 }
 
@@ -32,28 +31,30 @@ export default function DataFormatter({
 
       if (asset) {
         if (type === 'deposit') {
-          asset.holdings += coinQuantity
+          asset.holdings.original += coinQuantity
           asset.netCost += coinQuantity * pricePerCoin
         }
         if (type === 'withdraw') {
-          asset.holdings -= coinQuantity
+          asset.holdings.original -= coinQuantity
           asset.netCost -= coinQuantity * pricePerCoin
         }
       } else {
         const newAsset: ISingleAsset = {
           coinId,
-          holdings: coinQuantity,
+          holdings: {
+            original: coinQuantity,
+            usd: coinQuantity * currentPrices[coinId].usd
+          },
           netCost: coinQuantity * pricePerCoin,
           currentPrice: currentPrices[coinId].usd,
-          marketValue: coinQuantity * currentPrices[coinId].usd,
           profit: 0
         }
         assets.push(newAsset)
       }
 
       assets.forEach((a) => {
-        a.marketValue = a.holdings * a.currentPrice
-        a.profit = a.marketValue - a.netCost
+        a.holdings.usd = a.holdings.original * currentPrices[coinId].usd
+        a.profit = a.holdings.usd - a.netCost
       })
     })
   }
