@@ -1,4 +1,4 @@
-export interface IRawCoinData {
+export interface IMarketQuery {
   id: string
   symbol: string
   name: string
@@ -25,4 +25,8 @@ export interface IRawCoinData {
   atl_date: string
   roi: { times: number; currency: string; percentage: number } | null
   last_updated: string
+}
+
+export interface IPriceQuery {
+  usd: string
 }

@@ -2,7 +2,7 @@ import { configureStore, Action, ThunkAction } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
 import { coingeckoApi } from '../services/coingecko'
 import { localApi } from '../services/local'
-import userReducer from './user/userSlice'
+import userReducer from './userSlice'
 
 export const store = configureStore({
   reducer: {

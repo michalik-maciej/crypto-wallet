@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import TableCell from '@mui/material/TableCell'
@@ -12,26 +13,39 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 import { useGetUserTransactionsQuery } from '../../../services/local'
 import { useGetCoinByIdQuery } from '../../../services/coingecko'
-import dataFormatter, { ITransactionQuery } from './dataFormatter'
+import { IPriceQuery } from '../../../services/coingecko.types'
+import { useAppSelector } from '../../../redux/hooks'
+import { getUserId } from '../../../redux/userSlice'
+import { IUserQuery } from '../../../services/local.types'
+import dataFormatter, { ISingleAsset } from './dataFormatter'
 
 export default function Portfolio() {
   const theme = useTheme()
+  const navigate = useNavigate()
+  const userId = useAppSelector((state) => getUserId(state))
+  const [formattedData, setFormattedData] = useState<ISingleAsset[]>([])
+
   const {
     isLoading,
     isSuccess,
     error,
-    data: transactions
+    data: rawData
   } = useGetUserTransactionsQuery<{
     isLoading: boolean
     isSuccess: boolean
     error: FetchBaseQueryError
-    data: ITransactionQuery[]
-  }>('test@email')
-  const coinIds = transactions?.map(({ coinId }) => coinId)
-  const { data: currentPrices } = useGetCoinByIdQuery(
-    [...new Set(coinIds)].join('%2C')
-  )
-  const formattedCoinsData = dataFormatter({ transactions, currentPrices })
+    data: IUserQuery
+  }>(userId)
+
+  const coinIds = rawData?.coins?.map(({ originalId }) => originalId)
+  const { data: currentPrices } = useGetCoinByIdQuery<{
+    data: Record<string, IPriceQuery>
+  }>(coinIds?.join('%2C'))
+
+  useEffect(() => {
+    setFormattedData(dataFormatter(rawData, currentPrices))
+  }, [])
+
   const columnHeaders = [
     { id: 'name', caption: 'Name' },
     { id: 'price', caption: 'Price' },
@@ -46,7 +60,7 @@ export default function Portfolio() {
           {error?.status} {JSON.stringify(error?.data)}{' '}
         </div>
       )}
-      {isSuccess && (
+      {isSuccess && !!formattedData.length && (
         <Table>
           <TableHead>
             <TableRow>
@@ -66,22 +80,49 @@ export default function Portfolio() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {formattedCoinsData.map(({ coinId, currentPrice, holdings }) => (
+            {formattedData.map(({ coin, currentPrice, holdings }) => (
               <TableRow
-                key={coinId}
+                key={coin.originalId}
                 hover
-                component={Link}
-                to={`/coins/${coinId}`}
-                sx={{ textDecoration: 'none' }}
+                onClick={() => navigate(`/coins/${coin.originalId}`)}
+                sx={{ textDecoration: 'none', cursor: 'pointer' }}
               >
-                <TableCell>{coinId}</TableCell>
-                <TableCell>{currentPrice}</TableCell>
+                <TableCell>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Avatar
+                      src={coin.logo}
+                      sx={{ height: '1.5rem', width: '1.5rem' }}
+                      alt={`${coin.name} logo`}
+                    />
+                    <Box
+                      sx={{
+                        width: '40%',
+                        display: { xs: 'none', md: 'block' }
+                      }}
+                    >
+                      {coin.name}
+                    </Box>
+                    <Box sx={{ fontWeight: 600 }}>{coin.symbol}</Box>
+                  </Stack>
+                </TableCell>
+                <TableCell>
+                  $
+                  {currentPrice.toLocaleString('en-US', {
+                    maximumFractionDigits: 2
+                  })}
+                </TableCell>
                 <TableCell>
                   {' '}
                   <Stack direction="row" alignItems="center" spacing={2}>
-                    <Box sx={{ fontWeight: 600 }}>${holdings.usd}</Box>
+                    <Box sx={{ fontWeight: 600 }}>
+                      $
+                      {holdings.usd.toLocaleString('en-US', {
+                        maximumFractionDigits: 2,
+                        minimumFractionDigits: 2
+                      })}
+                    </Box>
                     <Box>
-                      {holdings.original} {coinId}
+                      {holdings.original} {coin.symbol}
                     </Box>
                   </Stack>
                 </TableCell>

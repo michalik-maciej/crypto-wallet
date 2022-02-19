@@ -1,4 +1,4 @@
-import { IRawCoinData } from '../../../redux/coins/types'
+import { IMarketQuery } from '../../../services/coingecko.types'
 
 interface IFormattedCoinData {
   coinId: string
@@ -10,7 +10,7 @@ interface IFormattedCoinData {
 }
 
 export default function DataFormatter(
-  coinData: IRawCoinData
+  coinData: IMarketQuery
 ): IFormattedCoinData {
   return {
     coinId: coinData.id,
