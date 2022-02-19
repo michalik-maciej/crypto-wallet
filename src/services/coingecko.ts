@@ -7,11 +7,11 @@ export const coingeckoApi = createApi({
     getPing: builder.query({
       query: () => `ping`
     }),
-    getAllCoins: builder.query({
+    getCoinsMarket: builder.query({
       query: () =>
         `coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false`
     }),
-    getCoinById: builder.query({
+    getCurrentPrice: builder.query({
       query: (coinIds) => `simple/price?ids=${coinIds}&vs_currencies=usd`
     }),
     getCoinChart: builder.query({
@@ -23,7 +23,7 @@ export const coingeckoApi = createApi({
 
 export const {
   useGetPingQuery,
-  useGetAllCoinsQuery,
-  useGetCoinByIdQuery,
+  useGetCoinsMarketQuery,
+  useGetCurrentPriceQuery,
   useGetCoinChartQuery
 } = coingeckoApi

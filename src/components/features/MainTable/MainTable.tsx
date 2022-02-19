@@ -2,30 +2,31 @@ import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import TableCell from '@mui/material/TableCell'
 import { useTheme } from '@mui/material'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import ProgressBar from '../ProgressBar/ProgressBar'
-import { IRawCoinData } from '../../../redux/coins/types'
-import { useGetAllCoinsQuery } from '../../../services/coingecko'
-import DataFormatter from './DataFormatter'
+import ProgressBar from '../../common/ProgressBar/ProgressBar'
+import { useGetCoinsMarketQuery } from '../../../services/coingecko'
+import { IMarketQuery } from '../../../services/coingecko.types'
+import DataFormatter from './dataFormatter'
 
 export default function MainTable() {
   const theme = useTheme()
+  const navigate = useNavigate()
   const {
     isLoading,
     isSuccess,
     error,
     data: rawCoinsData
-  } = useGetAllCoinsQuery<{
+  } = useGetCoinsMarketQuery<{
     isLoading: boolean
     isSuccess: boolean
     error: FetchBaseQueryError
-    data: IRawCoinData[]
+    data: IMarketQuery[]
   }>(null)
 
   const columnHeaders = [
@@ -69,10 +70,9 @@ export default function MainTable() {
               ({ coinId, rank, name, price, priceChange, marketCap }) => (
                 <TableRow
                   key={coinId}
+                  onClick={() => navigate(`/coins/${coinId}`)}
                   hover
-                  component={Link}
-                  to={`/coins/${coinId}`}
-                  sx={{ textDecoration: 'none' }}
+                  sx={{ textDecoration: 'none', cursor: 'pointer' }}
                 >
                   <TableCell>{rank.data}</TableCell>
                   <TableCell>

@@ -6,21 +6,15 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import RadioInput from '../../common/RadioInput/RadioInput'
 import TextInput from '../../common/TextInput/TextInput'
 import { usePostTransactionMutation } from '../../../services/local'
-import { selectUserId } from '../../../redux/user/userSlice'
+import { getUserId } from '../../../redux/userSlice'
 import { useAppSelector } from '../../../redux/hooks'
 
 export interface IFormProps {
-  id: string
+  originalId: string
   price: number
   name: string
   symbol: string
   logo: string
-}
-
-interface IFormInputs {
-  pricePerCoin: number
-  coinQuantity: number
-  type: string
 }
 
 const validationSchema = yup.object().shape({
@@ -29,12 +23,18 @@ const validationSchema = yup.object().shape({
   type: yup.string().required()
 })
 
-export default function Form({ id, price, symbol }: IFormProps) {
+export default function Form({
+  originalId,
+  name,
+  logo,
+  price,
+  symbol
+}: IFormProps) {
   const [postTransaction, postTransactionResult] = usePostTransactionMutation()
-  const user = useAppSelector((state) => selectUserId(state))
+  const userId = useAppSelector((state) => getUserId(state))
   const [coinAmount, setCoinAmount] = useState(1)
   const [coinPrice, setCoinPrice] = useState(price)
-  const methods = useForm<IFormInputs>({
+  const methods = useForm({
     resolver: yupResolver(validationSchema)
   })
 
@@ -44,14 +44,14 @@ export default function Form({ id, price, symbol }: IFormProps) {
         component="form"
         noValidate
         onSubmit={methods.handleSubmit((formData) => {
-          if (!user) {
+          if (!userId) {
             console.log('need to login to add transaction!')
             return
           }
           const payload = {
             ...formData,
-            userId: user,
-            coinId: id,
+            userId,
+            coin: { originalId, symbol, name, logo },
             timestamp: Date.now()
           }
           postTransaction(payload)

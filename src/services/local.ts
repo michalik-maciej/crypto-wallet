@@ -4,10 +4,7 @@ export const localApi = createApi({
   reducerPath: 'localApi',
   baseQuery: fetchBaseQuery({ baseUrl: `http://localhost:8011/api` }),
   endpoints: (builder) => ({
-    getPing: builder.query({
-      query: () => `ping`
-    }),
-    postUser: builder.mutation({
+    loginUser: builder.mutation({
       query: (loginData) => ({
         url: `/user/login`,
         method: 'POST',
@@ -28,8 +25,7 @@ export const localApi = createApi({
 })
 
 export const {
-  useGetPingQuery,
   useGetUserTransactionsQuery,
-  usePostUserMutation,
+  useLoginUserMutation,
   usePostTransactionMutation
 } = localApi

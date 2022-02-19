@@ -1,4 +1,4 @@
-import { IRawCoinData } from '../../../redux/coins/types'
+import { IMarketQuery } from '../../../services/coingecko.types'
 
 export interface DataFormatterProps {
   coinId: string
@@ -10,12 +10,18 @@ export interface DataFormatterProps {
     price: number | string
     priceChange: { label: string; positive: boolean }
   }
-  form: any
+  form: {
+    originalId: string
+    price: number
+    name: string
+    symbol: string
+    logo: string
+  }
   chart: { price: number }
 }
 
 export default function DataFormatter(
-  coinData: IRawCoinData
+  coinData: IMarketQuery
 ): DataFormatterProps {
   return {
     coinId: coinData.id,
@@ -31,7 +37,7 @@ export default function DataFormatter(
       }
     },
     form: {
-      id: coinData.id,
+      originalId: coinData.id,
       price: coinData.current_price,
       name: coinData.name,
       symbol: coinData.symbol.toUpperCase(),
