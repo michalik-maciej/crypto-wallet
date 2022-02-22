@@ -1,5 +1,6 @@
 {
   "name": "halniak-crypto-wallet",
+  "homepage": "https://halniak-crypto-wallet.web.app/",
   "version": "1.0.0",
   "scripts": {
     "start": "react-scripts start",
@@ -8,6 +9,7 @@
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
+  "proxy": "http://localhost:8011",
   "eslintConfig": {
     "extends": [
       "react-app",
