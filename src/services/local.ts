@@ -1,17 +1,15 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { IUserLoginInput } from './local.types'
+import { IUserLoginInput, IUserLoginOutput } from './local.types'
 
 const API_URL =
   process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8011/api'
 
 export const localApi = createApi({
   reducerPath: 'localApi',
+  tagTypes: ['Transaction'],
   baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
   endpoints: (builder) => ({
-    loginUser: builder.mutation<
-      { userId: string; message: string },
-      IUserLoginInput
-    >({
+    loginUser: builder.mutation<IUserLoginOutput, IUserLoginInput>({
       query: (loginData) => ({
         url: `/user/login`,
         method: 'POST',
@@ -19,14 +17,16 @@ export const localApi = createApi({
       })
     }),
     getUserTransactions: builder.query({
-      query: (userId) => `/transactions/${userId}`
+      query: (userId) => `/transactions/${userId}`,
+      providesTags: ['Transaction']
     }),
     postTransaction: builder.mutation({
       query: (data) => ({
         url: `/transactions/add`,
         method: 'POST',
         body: data
-      })
+      }),
+      invalidatesTags: ['Transaction']
     })
   })
 })
