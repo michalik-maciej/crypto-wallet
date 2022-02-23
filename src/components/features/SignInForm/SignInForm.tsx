@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react'
+import { useState } from 'react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Button from '@mui/material/Button'
@@ -7,11 +7,9 @@ import { useForm } from 'react-hook-form'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import Alert from '@mui/material/Alert'
-import Snackbar from '@mui/material/Snackbar'
 import { useLoginUserMutation } from '../../../services/local'
 import { useAppDispatch } from '../../../redux/hooks'
-import { storeUserId } from '../../../redux/userSlice'
+import { logUserIn } from '../../../redux/userSlice'
 import isResponseError from '../../../services/local.helpers'
 import FeedbackAlert from '../../common/FeedbackAlert/FeedbackAlert'
 
@@ -26,6 +24,7 @@ export interface IUserLoginInput {
 }
 
 export default function SignInForm() {
+  const dispatch = useAppDispatch()
   const {
     register,
     handleSubmit,
@@ -33,10 +32,7 @@ export default function SignInForm() {
   } = useForm<IUserLoginInput>({
     resolver: yupResolver(validationSchema)
   })
-  const [
-    loginUser,
-    returnLoginUser /* { isSuccess: loginIsSuccess, data: loginData } */
-  ] = useLoginUserMutation()
+  const [loginUser, returnLoginUser] = useLoginUserMutation()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -49,7 +45,8 @@ export default function SignInForm() {
         noValidate
         onSubmit={handleSubmit(async (data) => {
           try {
-            await loginUser(data).unwrap()
+            const loginResponse = await loginUser(data).unwrap()
+            dispatch(logUserIn(loginResponse.userId))
           } catch (error) {
             if (isResponseError(error)) setResponseErrorMessage(error.data)
             console.log(error)
@@ -98,12 +95,11 @@ export default function SignInForm() {
         >
           Login
         </Button>
-        {alert}
         {returnLoginUser.isError && (
           <FeedbackAlert
             open={returnLoginUser.isError}
             message={responseErrorMessage}
-            type="warning"
+            type="error"
           />
         )}
         {returnLoginUser.isSuccess && (
