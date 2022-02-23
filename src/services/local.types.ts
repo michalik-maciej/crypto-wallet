@@ -23,3 +23,8 @@ export interface IUserLoginInput {
   email: string
   password: string
 }
+
+export interface IUserLoginOutput {
+  userId: string
+  message: string
+}

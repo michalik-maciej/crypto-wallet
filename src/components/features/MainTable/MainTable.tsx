@@ -56,7 +56,7 @@ export default function MainTable() {
                   sx={{
                     fontWeight: 600,
                     ...(id === 'marketCap' && {
-                      display: { xs: 'none', sm: 'block' }
+                      display: { xs: 'none', sm: 'table-cell' }
                     })
                   }}
                 >
@@ -85,7 +85,7 @@ export default function MainTable() {
                       <Box
                         sx={{
                           width: '40%',
-                          display: { xs: 'none', md: 'block' }
+                          display: { xs: 'none', md: 'table-cell' }
                         }}
                       >
                         {name.data.name}
@@ -104,7 +104,7 @@ export default function MainTable() {
                   >
                     {priceChange.data.label}
                   </TableCell>
-                  <TableCell sx={{ display: { xs: 'none', sm: 'block' } }}>
+                  <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
                     {marketCap.data}
                   </TableCell>
                 </TableRow>
