@@ -18,3 +18,8 @@ export interface IUserQuery {
   transactions: IUserTransaction[]
   coins: IUserCoin[]
 }
+
+export interface IUserLoginInput {
+  email: string
+  password: string
+}
