@@ -38,22 +38,25 @@ export default function SignInForm() {
   const [password, setPassword] = useState('')
   const [responseErrorMessage, setResponseErrorMessage] = useState('')
 
+  const submitForm = async (data: IUserLoginInput) => {
+    try {
+      const loginResponse = await loginUser(data).unwrap()
+      dispatch(logUserIn(loginResponse.userId))
+    } catch (error) {
+      if (isResponseError(error)) setResponseErrorMessage(error.data)
+      console.log(error)
+    }
+  }
+
   return (
     <Container maxWidth="xs">
       <Box
         component="form"
         noValidate
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            const loginResponse = await loginUser(data).unwrap()
-            dispatch(logUserIn(loginResponse.userId))
-          } catch (error) {
-            if (isResponseError(error)) setResponseErrorMessage(error.data)
-            console.log(error)
-          }
-        })}
+        onSubmit={handleSubmit(submitForm)}
         sx={{
           marginTop: 8,
+          marginBottom: 8,
           paddingLeft: 2,
           paddingRight: 2,
           display: 'flex',
@@ -70,6 +73,7 @@ export default function SignInForm() {
           error={!!errors.email}
           helperText={errors.email ? errors.email?.message : ''}
           label="Email address"
+          disabled={returnLoginUser.isSuccess}
           autoComplete="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -82,14 +86,19 @@ export default function SignInForm() {
           error={!!errors.password}
           helperText={errors.password ? errors.password?.message : ''}
           label="Password"
+          disabled={returnLoginUser.isSuccess}
           type="password"
           autoComplete="current-password"
           value={password}
           onChange={(event) => setPassword(event.target.value)}
+          onKeyDown={(event: React.KeyboardEvent) =>
+            event.key === 'Enter' && handleSubmit(submitForm)
+          }
         />
         <Button
           variant="contained"
           fullWidth
+          disabled={returnLoginUser.isSuccess}
           type="submit"
           sx={{ fontWeight: 600, m: 2 }}
         >

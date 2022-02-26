@@ -2,17 +2,22 @@ import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { useAppDispatch } from '../../../redux/hooks'
-import { logUserOut } from '../../../redux/userSlice'
+import { useNavigate } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
+import { logUserOut, getUserLogged } from '../../../redux/userSlice'
+import FeedbackAlert from '../../common/FeedbackAlert/FeedbackAlert'
 
 export default function SignOutForm() {
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
+  const logged = useAppSelector((state) => getUserLogged(state))
 
   return (
     <Container maxWidth="xs">
       <Box
         sx={{
           marginTop: 8,
+          marginBottom: 8,
           paddingLeft: 2,
           paddingRight: 2,
           display: 'flex',
@@ -20,16 +25,20 @@ export default function SignOutForm() {
           alignItems: 'center'
         }}
       >
-        <Typography variant="h5">Sign out</Typography>{' '}
+        <Typography variant="h5">Sign out?</Typography>{' '}
         <Button
           variant="contained"
           fullWidth
           type="button"
           sx={{ fontWeight: 600, m: 2 }}
-          onClick={() => dispatch(logUserOut())}
+          onClick={() => {
+            navigate('/')
+            dispatch(logUserOut())
+          }}
         >
           Logout
         </Button>
+        <FeedbackAlert open={!logged} message="Logged out" type="success" />
       </Box>
     </Container>
   )
