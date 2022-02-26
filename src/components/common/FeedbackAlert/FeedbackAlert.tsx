@@ -9,7 +9,10 @@ interface IFeebackAlertProps {
 
 function FeedbackAlert({ message, type, open }: IFeebackAlertProps) {
   return (
-    <Snackbar open={open}>
+    <Snackbar
+      open={open}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+    >
       <Alert severity={type}>{message}</Alert>
     </Snackbar>
   )
