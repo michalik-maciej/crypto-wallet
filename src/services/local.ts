@@ -16,6 +16,14 @@ export const localApi = createApi({
         body: loginData
       })
     }),
+    createUser: builder.mutation({
+      query: (data) => ({
+        url: `/user/add`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['Transaction']
+    }),
     getUserTransactions: builder.query({
       query: (userId) => `/transactions/${userId}`,
       providesTags: ['Transaction']
@@ -32,7 +40,8 @@ export const localApi = createApi({
 })
 
 export const {
-  useGetUserTransactionsQuery,
   useLoginUserMutation,
+  useCreateUserMutation,
+  useGetUserTransactionsQuery,
   usePostTransactionMutation
 } = localApi

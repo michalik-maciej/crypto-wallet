@@ -5,8 +5,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined'
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded'
 import Container from '@mui/material/Container'
-import { Link } from 'react-router-dom'
-import Button from '@mui/material/Button'
+import { useNavigate } from 'react-router-dom'
 import bgImg from '../../../assets/hero-bg.jpg'
 import MenuButton from '../../common/MenuButton/MenuButton'
 import Modal from '../Modal/Modal'
@@ -19,6 +18,7 @@ export default function Header() {
   const logged = useAppSelector((state) => getUserLogged(state))
   const [openLogin, setOpenLogin] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
+  const navigate = useNavigate()
   const StyledTopbar = styled('div')({
     display: 'flex',
     padding: '1rem',
@@ -41,33 +41,30 @@ export default function Header() {
               md: { marginRight: 1, marginLeft: 1 }
             }}
           >
-            <Link to="/">
-              <MenuButton label="back to homepage">
-                <HomeOutlinedIcon fontSize="inherit" />
-              </MenuButton>
-            </Link>
+            <MenuButton label="back to homepage" action={() => navigate('/')}>
+              <HomeOutlinedIcon fontSize="inherit" />
+            </MenuButton>
             <Stack
               spacing={1}
               direction="row"
               sx={{ justifyContent: 'space-between' }}
             >
               {logged && (
-                <Link to="/user">
-                  <MenuButton label="user portfolio">
-                    <AccountBalanceWalletRoundedIcon fontSize="inherit" />
-                  </MenuButton>
-                </Link>
+                <MenuButton
+                  label="user portfolio"
+                  action={() => navigate('/user')}
+                >
+                  <AccountBalanceWalletRoundedIcon fontSize="inherit" />
+                </MenuButton>
               )}
-              <Button
-                sx={{ p: 0 }}
-                onClick={() =>
+              <MenuButton
+                label="login form"
+                action={() =>
                   logged ? setOpenLogout(true) : setOpenLogin(true)
                 }
               >
-                <MenuButton label="login form">
-                  <LockOpenOutlinedIcon fontSize="inherit" />
-                </MenuButton>
-              </Button>
+                <LockOpenOutlinedIcon fontSize="inherit" />
+              </MenuButton>
             </Stack>
           </Stack>
         </Container>

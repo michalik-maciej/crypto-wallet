@@ -7,7 +7,12 @@ import { useForm } from 'react-hook-form'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { useLoginUserMutation } from '../../../services/local'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import {
+  useLoginUserMutation,
+  useCreateUserMutation
+} from '../../../services/local'
 import { useAppDispatch } from '../../../redux/hooks'
 import { logUserIn } from '../../../redux/userSlice'
 import isResponseError from '../../../services/local.helpers'
@@ -15,12 +20,14 @@ import FeedbackAlert from '../../common/FeedbackAlert/FeedbackAlert'
 
 const validationSchema = yup.object().shape({
   email: yup.string().email().required(),
-  password: yup.string().required()
+  password: yup.string().min(4).required(),
+  newUser: yup.boolean().required()
 })
 
 export interface IUserLoginInput {
   email: string
   password: string
+  newUser: boolean
 }
 
 export default function SignInForm() {
@@ -33,6 +40,7 @@ export default function SignInForm() {
     resolver: yupResolver(validationSchema)
   })
   const [loginUser, returnLoginUser] = useLoginUserMutation()
+  const [createUser] = useCreateUserMutation()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -40,6 +48,7 @@ export default function SignInForm() {
 
   const submitForm = async (data: IUserLoginInput) => {
     try {
+      if (data.newUser) await createUser(data)
       const loginResponse = await loginUser(data).unwrap()
       dispatch(logUserIn(loginResponse.userId))
     } catch (error) {
@@ -104,6 +113,11 @@ export default function SignInForm() {
         >
           Login
         </Button>
+        <FormControlLabel
+          {...register('newUser')}
+          control={<Checkbox />}
+          label="Sign up as a new user"
+        />
         {returnLoginUser.isError && (
           <FeedbackAlert
             open={returnLoginUser.isError}
