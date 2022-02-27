@@ -1,28 +1,16 @@
 import { IMarketQuery } from '../../../services/coingecko.types'
+import { IFormProps } from './Form'
+import { IMarketProps } from './Market'
 
-export interface DataFormatterProps {
+export interface IDataFormatterProps {
   coinId: string
-  market: {
-    name: string
-    symbol: string
-    logo: string
-    rank: string
-    price: number | string
-    priceChange: { label: string; positive: boolean }
-  }
-  form: {
-    originalId: string
-    price: number
-    name: string
-    symbol: string
-    logo: string
-  }
-  chart: { price: number }
+  market: IMarketProps
+  form: IFormProps
 }
 
 export default function DataFormatter(
   coinData: IMarketQuery
-): DataFormatterProps {
+): IDataFormatterProps {
   return {
     coinId: coinData.id,
     market: {
@@ -42,9 +30,6 @@ export default function DataFormatter(
       name: coinData.name,
       symbol: coinData.symbol.toUpperCase(),
       logo: coinData.image
-    },
-    chart: {
-      price: coinData.current_price
     }
   }
 }

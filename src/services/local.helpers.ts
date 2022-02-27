@@ -5,6 +5,7 @@ export default function isResponseError(
     typeof error === 'object' &&
     error != null &&
     'data' in error &&
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     typeof (error as any).data === 'string'
   )
 }

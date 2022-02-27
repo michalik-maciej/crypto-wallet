@@ -1,5 +1,4 @@
 import { ReactNode } from 'react'
-import Box from '@mui/material/Box'
 import LinearProgress from '@mui/material/LinearProgress'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'

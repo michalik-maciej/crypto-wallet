@@ -8,9 +8,9 @@ import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
 import { IMarketQuery } from '../../../services/coingecko.types'
 import { useGetCoinsMarketQuery } from '../../../services/coingecko'
-import Market from '../../sections/Market/Market'
-import Form from '../../sections/Form/Form'
-import DataFormatter from './dataFormatter'
+import Market from './Market'
+import Form from './Form'
+import DataFormatter from './CoinPage.helper'
 
 type CoinPageParams = {
   coinId: string
@@ -38,11 +38,10 @@ export default function CoinPage() {
     flexDirection: 'column'
   })
 
-  const { form, market, chart } = currentCoin
+  const { form, market } = currentCoin
   const sections = [
-    { id: 'market', component: <Market data={market} /> },
+    { id: 'market', component: <Market {...market} /> },
     { id: 'form', component: <Form {...form} /> }
-    // { id: 'chart', component: <Chart>chart</Chart> }
   ]
 
   return (

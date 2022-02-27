@@ -8,18 +8,18 @@ import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import TableCell from '@mui/material/TableCell'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-
+import { RootState } from '../../../redux/store'
 import { useGetUserTransactionsQuery } from '../../../services/local'
 import { useGetCurrentPriceQuery } from '../../../services/coingecko'
 import { IPriceQuery } from '../../../services/coingecko.types'
 import { useAppSelector } from '../../../redux/hooks'
 import { getUserId } from '../../../redux/userSlice'
 import { IUserQuery } from '../../../services/local.types'
-import dataFormatter from './dataFormatter'
+import dataFormatter from './Portfolio.helper'
 
 export default function Portfolio() {
   const navigate = useNavigate()
-  const userId = useAppSelector((state) => getUserId(state))
+  const userId = useAppSelector((state: RootState) => getUserId(state))
 
   const {
     isLoading,

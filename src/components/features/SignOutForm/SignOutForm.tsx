@@ -6,11 +6,12 @@ import { useNavigate } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks'
 import { logUserOut, getUserLogged } from '../../../redux/userSlice'
 import FeedbackAlert from '../../common/FeedbackAlert/FeedbackAlert'
+import { RootState } from '../../../redux/store'
 
 export default function SignOutForm() {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
-  const logged = useAppSelector((state) => getUserLogged(state))
+  const logged = useAppSelector((state: RootState) => getUserLogged(state))
 
   return (
     <Container maxWidth="xs">

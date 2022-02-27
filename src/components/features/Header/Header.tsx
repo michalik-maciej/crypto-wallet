@@ -13,9 +13,10 @@ import { getUserLogged } from '../../../redux/userSlice'
 import { useAppSelector } from '../../../redux/hooks'
 import SignOutForm from '../SignOutForm/SignOutForm'
 import SignInForm from '../SignInForm/SignInForm'
+import { RootState } from '../../../redux/store'
 
 export default function Header() {
-  const logged = useAppSelector((state) => getUserLogged(state))
+  const logged = useAppSelector((state: RootState) => getUserLogged(state))
   const [openLogin, setOpenLogin] = useState(false)
   const [openLogout, setOpenLogout] = useState(false)
   const navigate = useNavigate()

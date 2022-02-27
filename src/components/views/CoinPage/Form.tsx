@@ -8,6 +8,7 @@ import TextInput from '../../common/TextInput/TextInput'
 import { usePostTransactionMutation } from '../../../services/local'
 import { getUserId } from '../../../redux/userSlice'
 import { useAppSelector } from '../../../redux/hooks'
+import { RootState } from '../../../redux/store'
 
 export interface IFormProps {
   originalId: string
@@ -31,7 +32,7 @@ export default function Form({
   symbol
 }: IFormProps) {
   const [postTransaction, postTransactionResult] = usePostTransactionMutation()
-  const userId = useAppSelector((state) => getUserId(state))
+  const userId = useAppSelector((state: RootState) => getUserId(state))
   const [coinAmount, setCoinAmount] = useState(1)
   const [coinPrice, setCoinPrice] = useState(price)
   const methods = useForm({

@@ -12,7 +12,7 @@ import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import ProgressBar from '../../common/ProgressBar/ProgressBar'
 import { useGetCoinsMarketQuery } from '../../../services/coingecko'
 import { IMarketQuery } from '../../../services/coingecko.types'
-import DataFormatter from './dataFormatter'
+import DataFormatter from './MainTable.helper'
 
 export default function MainTable() {
   const theme = useTheme()

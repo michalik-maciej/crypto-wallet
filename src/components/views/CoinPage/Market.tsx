@@ -1,12 +1,16 @@
 import Avatar from '@mui/material/Avatar'
-import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
 import { useTheme, styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
-interface MarketProps {
-  data: any
+export interface IMarketProps {
+  name: string
+  symbol: string
+  logo: string
+  rank: string
+  price: number | string
+  priceChange: { label: string; positive: boolean }
 }
 
 const StyledChip = styled(Chip)({
@@ -14,9 +18,15 @@ const StyledChip = styled(Chip)({
   fontWeight: 'bold'
 })
 
-export default function Market({ data }: MarketProps) {
+export default function Market({
+  logo,
+  name,
+  symbol,
+  rank,
+  price,
+  priceChange
+}: IMarketProps) {
   const theme = useTheme()
-  const { logo, name, symbol, rank, price, priceChange } = data
 
   return (
     <>
