@@ -53,7 +53,6 @@ export default function SignInForm() {
       dispatch(logUserIn(loginResponse.userId))
     } catch (error) {
       if (isResponseError(error)) setResponseErrorMessage(error.data)
-      console.log(error)
     }
   }
 
