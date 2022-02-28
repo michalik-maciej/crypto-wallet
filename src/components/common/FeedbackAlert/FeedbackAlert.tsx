@@ -1,13 +1,13 @@
 import Alert from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 
-interface IFeebackAlertProps {
+export interface IFeedbackAlertProps {
   message: string
   type: 'success' | 'warning' | 'error' | 'info'
   open: boolean
 }
 
-function FeedbackAlert({ message, type, open }: IFeebackAlertProps) {
+function FeedbackAlert({ message, type, open }: IFeedbackAlertProps) {
   return (
     <Snackbar
       open={open}
