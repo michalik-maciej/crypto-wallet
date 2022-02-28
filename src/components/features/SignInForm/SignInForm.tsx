@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Button from '@mui/material/Button'
@@ -16,7 +16,9 @@ import {
 import { useAppDispatch } from '../../../redux/hooks'
 import { logUserIn } from '../../../redux/userSlice'
 import isResponseError from '../../../services/local.helpers'
-import FeedbackAlert from '../../common/FeedbackAlert/FeedbackAlert'
+import FeedbackAlert, {
+  IFeedbackAlertProps
+} from '../../common/FeedbackAlert/FeedbackAlert'
 
 const validationSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -39,23 +41,36 @@ export default function SignInForm() {
   } = useForm<IUserLoginInput>({
     resolver: yupResolver(validationSchema)
   })
-  const [loginUser, returnLoginUser] = useLoginUserMutation()
+  const [loginUser] = useLoginUserMutation()
   const [createUser] = useCreateUserMutation()
 
+  const [feedbackData, setFeedbackData] = useState<IFeedbackAlertProps>({
+    message: '',
+    open: false,
+    type: 'success'
+  })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [responseErrorMessage, setResponseErrorMessage] = useState('')
 
-  const submitForm = async (data: IUserLoginInput) => {
+  const submitForm = async (inputData: IUserLoginInput) => {
     try {
-      if (data.newUser) await createUser(data)
-      const loginResponse = await loginUser(data).unwrap()
-      dispatch(logUserIn(loginResponse.userId))
+      if (inputData.newUser) {
+        const { message } = await createUser(inputData).unwrap()
+        setFeedbackData({ message, type: 'success', open: true })
+      } else {
+        const { userId, message } = await loginUser(inputData).unwrap()
+        setFeedbackData({ message, type: 'success', open: true })
+        dispatch(logUserIn(userId))
+      }
     } catch (error) {
-      if (isResponseError(error)) setResponseErrorMessage(error.data)
-      console.log(error)
+      if (isResponseError(error))
+        setFeedbackData({ message: error.data, type: 'error', open: true })
     }
   }
+
+  useEffect(() => {
+    setTimeout(() => setFeedbackData({ ...feedbackData, open: false }), 2000)
+  }, [feedbackData.open])
 
   return (
     <Container maxWidth="xs">
@@ -82,7 +97,7 @@ export default function SignInForm() {
           error={!!errors.email}
           helperText={errors.email ? errors.email?.message : ''}
           label="Email address"
-          disabled={returnLoginUser.isSuccess}
+          disabled={feedbackData.message === 'success'}
           autoComplete="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -95,7 +110,7 @@ export default function SignInForm() {
           error={!!errors.password}
           helperText={errors.password ? errors.password?.message : ''}
           label="Password"
-          disabled={returnLoginUser.isSuccess}
+          disabled={feedbackData.message === 'success'}
           type="password"
           autoComplete="current-password"
           value={password}
@@ -107,7 +122,7 @@ export default function SignInForm() {
         <Button
           variant="contained"
           fullWidth
-          disabled={returnLoginUser.isSuccess}
+          disabled={feedbackData.message === 'success'}
           type="submit"
           sx={{ fontWeight: 600, m: 2 }}
         >
@@ -118,20 +133,11 @@ export default function SignInForm() {
           control={<Checkbox />}
           label="Sign up as a new user"
         />
-        {returnLoginUser.isError && (
-          <FeedbackAlert
-            open={returnLoginUser.isError}
-            message={responseErrorMessage}
-            type="error"
-          />
-        )}
-        {returnLoginUser.isSuccess && (
-          <FeedbackAlert
-            open={returnLoginUser.isSuccess}
-            message={returnLoginUser.data.message}
-            type="success"
-          />
-        )}
+        <FeedbackAlert
+          open={feedbackData.open}
+          message={feedbackData.message}
+          type={feedbackData.type}
+        />
       </Box>
     </Container>
   )
