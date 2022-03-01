@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Button from '@mui/material/Button'
@@ -16,7 +16,9 @@ import {
 import { useAppDispatch } from '../../../redux/hooks'
 import { logUserIn } from '../../../redux/userSlice'
 import isResponseError from '../../../services/local.helpers'
-import FeedbackAlert from '../../common/FeedbackAlert/FeedbackAlert'
+import FeedbackAlert, {
+  IFeedbackAlertProps
+} from '../../common/FeedbackAlert/FeedbackAlert'
 
 const validationSchema = yup.object().shape({
   email: yup.string().email().required(),
@@ -30,7 +32,11 @@ export interface IUserLoginInput {
   newUser: boolean
 }
 
-export default function SignInForm() {
+interface ISignInFormProps {
+  handleSuccess: () => void
+}
+
+export default function SignInForm({ handleSuccess }: ISignInFormProps) {
   const dispatch = useAppDispatch()
   const {
     register,
@@ -42,6 +48,11 @@ export default function SignInForm() {
   const [loginUser, returnLoginUser] = useLoginUserMutation()
   const [createUser] = useCreateUserMutation()
 
+  const [feedbackData, setFeedbackData] = useState<IFeedbackAlertProps>({
+    message: '',
+    open: false,
+    type: 'error'
+  })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [responseErrorMessage, setResponseErrorMessage] = useState('')
@@ -56,6 +67,16 @@ export default function SignInForm() {
       console.log(error)
     }
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFeedbackData({ ...feedbackData, open: false })
+      if (feedbackData.type === 'success') {
+        handleSuccess()
+      }
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [feedbackData.open])
 
   return (
     <Container maxWidth="xs">
