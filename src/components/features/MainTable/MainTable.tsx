@@ -8,27 +8,16 @@ import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import TableCell from '@mui/material/TableCell'
 import { useTheme } from '@mui/material'
-import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import ProgressBar from '../../common/ProgressBar/ProgressBar'
-import { useGetCoinsMarketQuery } from '../../../services/coingecko'
-import { IMarketQuery } from '../../../services/coingecko.types'
-import DataFormatter from './MainTable.helper'
+import { IFormattedCoinData } from '../../views/HomePage/HomePage.helper'
 
-export default function MainTable() {
+interface IMainTableProps {
+  inputData: IFormattedCoinData[]
+  searchId: string
+}
+
+export default function MainTable({ inputData, searchId }: IMainTableProps) {
   const theme = useTheme()
   const navigate = useNavigate()
-  const {
-    isLoading,
-    isSuccess,
-    error,
-    data: rawCoinsData
-  } = useGetCoinsMarketQuery<{
-    isLoading: boolean
-    isSuccess: boolean
-    error: FetchBaseQueryError
-    data: IMarketQuery[]
-  }>(null)
-
   const columnHeaders = [
     { id: 'rank', caption: '#' },
     { id: 'name', caption: 'Name' },
@@ -36,83 +25,77 @@ export default function MainTable() {
     { id: 'priceChange', caption: '24h %' },
     { id: 'marketCap', caption: 'Market Cap' }
   ]
-  const formattedCoinsData = rawCoinsData?.map((coin) => DataFormatter(coin))
+
+  let tableData = inputData
+  if (searchId) {
+    tableData = inputData.filter((item) => item.coinId === searchId)
+  }
 
   return (
-    <>
-      {isLoading && <ProgressBar>Loading</ProgressBar>}
-      {error && (
-        <div>
-          {error.status} {JSON.stringify(error.data)}
-        </div>
-      )}
-      {isSuccess && (
-        <Table>
-          <TableHead>
-            <TableRow>
-              {columnHeaders.map(({ id, caption }) => (
-                <TableCell
-                  key={id}
-                  sx={{
-                    fontWeight: 600,
-                    ...(id === 'marketCap' && {
-                      display: { xs: 'none', sm: 'table-cell' }
-                    })
-                  }}
-                >
-                  {caption}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {formattedCoinsData.map(
-              ({ coinId, rank, name, price, priceChange, marketCap }) => (
-                <TableRow
-                  key={coinId}
-                  onClick={() => navigate(`/coins/${coinId}`)}
-                  hover
-                  sx={{ textDecoration: 'none', cursor: 'pointer' }}
-                >
-                  <TableCell>{rank.data}</TableCell>
-                  <TableCell>
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                      <Avatar
-                        src={name.data.image}
-                        sx={{ height: '1.5rem', width: '1.5rem' }}
-                        alt={`${name.data.name} logo`}
-                      />
-                      <Box
-                        sx={{
-                          width: '40%',
-                          display: { xs: 'none', md: 'table-cell' }
-                        }}
-                      >
-                        {name.data.name}
-                      </Box>
-                      <Box sx={{ fontWeight: 600 }}>{name.data.symbol}</Box>
-                    </Stack>
-                  </TableCell>
-                  <TableCell>{price.data}</TableCell>
-                  <TableCell
+    <Table>
+      <TableHead>
+        <TableRow>
+          {columnHeaders.map(({ id, caption }) => (
+            <TableCell
+              key={id}
+              sx={{
+                fontWeight: 600,
+                ...(id === 'marketCap' && {
+                  display: { xs: 'none', sm: 'table-cell' }
+                })
+              }}
+            >
+              {caption}
+            </TableCell>
+          ))}
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {tableData.map(
+          ({ coinId, rank, name, price, priceChange, marketCap }) => (
+            <TableRow
+              key={coinId}
+              onClick={() => navigate(`/coins/${coinId}`)}
+              hover
+              sx={{ textDecoration: 'none', cursor: 'pointer' }}
+            >
+              <TableCell>{rank.data}</TableCell>
+              <TableCell>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Avatar
+                    src={name.data.image}
+                    sx={{ height: '1.5rem', width: '1.5rem' }}
+                    alt={`${name.data.name} logo`}
+                  />
+                  <Box
                     sx={{
-                      fontWeight: 600,
-                      color: priceChange.data.positive
-                        ? theme.palette.success.main
-                        : theme.palette.error.main
+                      width: '40%',
+                      display: { xs: 'none', md: 'table-cell' }
                     }}
                   >
-                    {priceChange.data.label}
-                  </TableCell>
-                  <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
-                    {marketCap.data}
-                  </TableCell>
-                </TableRow>
-              )
-            )}
-          </TableBody>
-        </Table>
-      )}
-    </>
+                    {name.data.name}
+                  </Box>
+                  <Box sx={{ fontWeight: 600 }}>{name.data.symbol}</Box>
+                </Stack>
+              </TableCell>
+              <TableCell>{price.data}</TableCell>
+              <TableCell
+                sx={{
+                  fontWeight: 600,
+                  color: priceChange.data.positive
+                    ? theme.palette.success.main
+                    : theme.palette.error.main
+                }}
+              >
+                {priceChange.data.label}
+              </TableCell>
+              <TableCell sx={{ display: { xs: 'none', sm: 'table-cell' } }}>
+                {marketCap.data}
+              </TableCell>
+            </TableRow>
+          )
+        )}
+      </TableBody>
+    </Table>
   )
 }

@@ -13,3 +13,9 @@ export function weightedAverage(nums: number[], weights: number[]) {
   )
   return sum / weightSum
 }
+
+export function compareStrings(strA: string, strB: string) {
+  if (strA.toUpperCase() < strB.toUpperCase()) return -1
+  if (strA.toUpperCase() > strB.toUpperCase()) return 1
+  return 0
+}

@@ -1,6 +1,6 @@
 import { IMarketQuery } from '../../../services/coingecko.types'
 
-interface IFormattedCoinData {
+export interface IFormattedCoinData {
   coinId: string
   rank: { data: number }
   name: { data: { image: string; name: string; symbol: string } }
