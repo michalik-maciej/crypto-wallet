@@ -54,78 +54,84 @@ export default function Portfolio() {
           {error?.status} {JSON.stringify(error?.data)}{' '}
         </div>
       )}
-      {isSuccess && !!userData.assets.length && (
+      {isSuccess && (
         <>
-          <h2>Portfolio ${userData.total.toLocaleString('en-us')}</h2>
-          <Table>
-            <TableHead>
-              <TableRow>
-                {columnHeaders.map(({ id, caption }) => (
-                  <TableCell
-                    key={id}
-                    sx={{
-                      fontWeight: 600,
-                      ...(id === 'marketCap' && {
-                        display: { xs: 'none', sm: 'block' }
-                      })
-                    }}
-                  >
-                    {caption}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {userData.assets.map(({ coin, currentPrice, holdings }) => (
-                <TableRow
-                  key={coin.originalId}
-                  hover
-                  onClick={() => navigate(`/coins/${coin.originalId}`)}
-                  sx={{ textDecoration: 'none', cursor: 'pointer' }}
-                >
-                  <TableCell>
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                      <Avatar
-                        src={coin.logo}
-                        sx={{ height: '1.5rem', width: '1.5rem' }}
-                        alt={`${coin.name} logo`}
-                      />
-                      <Box
+          {!userData.assets.length && <h2>Add your first transaction</h2>}
+          {!!userData.assets.length && (
+            <>
+              {' '}
+              <h2>Portfolio ${userData.total.toLocaleString('en-us')}</h2>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    {columnHeaders.map(({ id, caption }) => (
+                      <TableCell
+                        key={id}
                         sx={{
-                          width: '40%',
-                          display: { xs: 'none', md: 'block' }
+                          fontWeight: 600,
+                          ...(id === 'marketCap' && {
+                            display: { xs: 'none', sm: 'block' }
+                          })
                         }}
                       >
-                        {coin.name}
-                      </Box>
-                      <Box sx={{ fontWeight: 600 }}>{coin.symbol}</Box>
-                    </Stack>
-                  </TableCell>
-                  <TableCell>
-                    $
-                    {currentPrice.toLocaleString('en-US', {
-                      maximumFractionDigits: 2
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    {' '}
-                    <Stack direction="row" alignItems="center" spacing={2}>
-                      <Box sx={{ fontWeight: 600 }}>
+                        {caption}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {userData.assets.map(({ coin, currentPrice, holdings }) => (
+                    <TableRow
+                      key={coin.originalId}
+                      hover
+                      onClick={() => navigate(`/coins/${coin.originalId}`)}
+                      sx={{ textDecoration: 'none', cursor: 'pointer' }}
+                    >
+                      <TableCell>
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Avatar
+                            src={coin.logo}
+                            sx={{ height: '1.5rem', width: '1.5rem' }}
+                            alt={`${coin.name} logo`}
+                          />
+                          <Box
+                            sx={{
+                              width: '40%',
+                              display: { xs: 'none', md: 'block' }
+                            }}
+                          >
+                            {coin.name}
+                          </Box>
+                          <Box sx={{ fontWeight: 600 }}>{coin.symbol}</Box>
+                        </Stack>
+                      </TableCell>
+                      <TableCell>
                         $
-                        {holdings.usd.toLocaleString('en-US', {
-                          maximumFractionDigits: 2,
-                          minimumFractionDigits: 2
+                        {currentPrice.toLocaleString('en-US', {
+                          maximumFractionDigits: 2
                         })}
-                      </Box>
-                      <Box>
-                        {holdings.original} {coin.symbol}
-                      </Box>
-                    </Stack>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      </TableCell>
+                      <TableCell>
+                        {' '}
+                        <Stack direction="row" alignItems="center" spacing={2}>
+                          <Box sx={{ fontWeight: 600 }}>
+                            $
+                            {holdings.usd.toLocaleString('en-US', {
+                              maximumFractionDigits: 2,
+                              minimumFractionDigits: 2
+                            })}
+                          </Box>
+                          <Box>
+                            {holdings.original} {coin.symbol}
+                          </Box>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </>
+          )}
         </>
       )}
     </>

@@ -45,7 +45,7 @@ export default function SignInForm({ handleSuccess }: ISignInFormProps) {
   } = useForm<IUserLoginInput>({
     resolver: yupResolver(validationSchema)
   })
-  const [loginUser, returnLoginUser] = useLoginUserMutation()
+  const [loginUser] = useLoginUserMutation()
   const [createUser] = useCreateUserMutation()
 
   const [feedbackData, setFeedbackData] = useState<IFeedbackAlertProps>({
@@ -55,16 +55,20 @@ export default function SignInForm({ handleSuccess }: ISignInFormProps) {
   })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [responseErrorMessage, setResponseErrorMessage] = useState('')
 
-  const submitForm = async (data: IUserLoginInput) => {
+  const submitForm = async (inputData: IUserLoginInput) => {
     try {
-      if (data.newUser) await createUser(data)
-      const loginResponse = await loginUser(data).unwrap()
-      dispatch(logUserIn(loginResponse.userId))
+      if (inputData.newUser) {
+        const { message } = await createUser(inputData).unwrap()
+        setFeedbackData({ message, type: 'success', open: true })
+      } else {
+        const { userId, message } = await loginUser(inputData).unwrap()
+        setFeedbackData({ message, type: 'success', open: true })
+        dispatch(logUserIn(userId))
+      }
     } catch (error) {
-      if (isResponseError(error)) setResponseErrorMessage(error.data)
-      console.log(error)
+      if (isResponseError(error))
+        setFeedbackData({ message: error.data, type: 'error', open: true })
     }
   }
 
@@ -103,7 +107,7 @@ export default function SignInForm({ handleSuccess }: ISignInFormProps) {
           error={!!errors.email}
           helperText={errors.email ? errors.email?.message : ''}
           label="Email address"
-          disabled={returnLoginUser.isSuccess}
+          disabled={feedbackData.message === 'success'}
           autoComplete="email"
           value={email}
           onChange={(event) => setEmail(event.target.value)}
@@ -116,7 +120,7 @@ export default function SignInForm({ handleSuccess }: ISignInFormProps) {
           error={!!errors.password}
           helperText={errors.password ? errors.password?.message : ''}
           label="Password"
-          disabled={returnLoginUser.isSuccess}
+          disabled={feedbackData.message === 'success'}
           type="password"
           autoComplete="current-password"
           value={password}
@@ -128,7 +132,7 @@ export default function SignInForm({ handleSuccess }: ISignInFormProps) {
         <Button
           variant="contained"
           fullWidth
-          disabled={returnLoginUser.isSuccess}
+          disabled={feedbackData.message === 'success'}
           type="submit"
           sx={{ fontWeight: 600, m: 2 }}
         >
@@ -139,20 +143,11 @@ export default function SignInForm({ handleSuccess }: ISignInFormProps) {
           control={<Checkbox />}
           label="Sign up as a new user"
         />
-        {returnLoginUser.isError && (
-          <FeedbackAlert
-            open={returnLoginUser.isError}
-            message={responseErrorMessage}
-            type="error"
-          />
-        )}
-        {returnLoginUser.isSuccess && (
-          <FeedbackAlert
-            open={returnLoginUser.isSuccess}
-            message={returnLoginUser.data.message}
-            type="success"
-          />
-        )}
+        <FeedbackAlert
+          open={feedbackData.open}
+          message={feedbackData.message}
+          type={feedbackData.type}
+        />
       </Box>
     </Container>
   )

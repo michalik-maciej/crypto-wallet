@@ -39,6 +39,7 @@
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@types/shortid": "^0.0.29",
+    "enzyme": "^3.11.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.26.1",
@@ -50,6 +51,7 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.11",
     "@types/jest": "^27.0.1",
     "@types/react": "^17.0.20",
     "@types/react-dom": "^17.0.9",
