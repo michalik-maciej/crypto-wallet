@@ -10,8 +10,8 @@ interface UserState {
 
 const initialState = {
   status: 'idle',
-  logged: true,
-  id: '620ed26b7f65d70be90509e6',
+  logged: false,
+  id: null,
   error: null
 } as UserState
 

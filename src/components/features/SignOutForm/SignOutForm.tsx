@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import Box from '@mui/material/Box'
@@ -8,10 +9,23 @@ import { logUserOut, getUserLogged } from '../../../redux/userSlice'
 import FeedbackAlert from '../../common/FeedbackAlert/FeedbackAlert'
 import { RootState } from '../../../redux/store'
 
-export default function SignOutForm() {
+interface ISignOutFormProps {
+  handleSuccess: () => void
+}
+
+export default function SignOutForm({ handleSuccess }: ISignOutFormProps) {
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
   const logged = useAppSelector((state: RootState) => getUserLogged(state))
+  const [feedbackData, setFeedbackData] = useState({ open: false })
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setFeedbackData({ open: false })
+      if (!logged) handleSuccess()
+    }, 2000)
+    return () => clearTimeout(timer)
+  }, [logged])
 
   return (
     <Container maxWidth="xs">
@@ -35,11 +49,16 @@ export default function SignOutForm() {
           onClick={() => {
             navigate('/')
             dispatch(logUserOut())
+            setFeedbackData({ open: true })
           }}
         >
           Logout
         </Button>
-        <FeedbackAlert open={!logged} message="Logged out" type="success" />
+        <FeedbackAlert
+          open={feedbackData.open}
+          message="Logged out"
+          type="success"
+        />
       </Box>
     </Container>
   )

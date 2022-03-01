@@ -15,6 +15,7 @@ import { IPriceQuery } from '../../../services/coingecko.types'
 import { useAppSelector } from '../../../redux/hooks'
 import { getUserId } from '../../../redux/userSlice'
 import { IUserQuery } from '../../../services/local.types'
+import ProgressBar from '../../common/ProgressBar/ProgressBar'
 import dataFormatter from './Portfolio.helper'
 
 export default function Portfolio() {
@@ -47,7 +48,7 @@ export default function Portfolio() {
 
   return (
     <>
-      {isLoading && <div>Loading...</div>}
+      {isLoading && <ProgressBar>Loading</ProgressBar>}
       {error && (
         <div>
           {error?.status} {JSON.stringify(error?.data)}{' '}

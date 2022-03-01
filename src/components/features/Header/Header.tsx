@@ -6,9 +6,9 @@ import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined'
 import AccountBalanceWalletRoundedIcon from '@mui/icons-material/AccountBalanceWalletRounded'
 import Container from '@mui/material/Container'
 import { useNavigate } from 'react-router-dom'
+import Dialog from '@mui/material/Dialog'
 import bgImg from '../../../assets/hero-bg.jpg'
 import MenuButton from '../../common/MenuButton/MenuButton'
-import Modal from '../Modal/Modal'
 import { getUserLogged } from '../../../redux/userSlice'
 import { useAppSelector } from '../../../redux/hooks'
 import SignOutForm from '../SignOutForm/SignOutForm'
@@ -71,14 +71,14 @@ export default function Header() {
         </Container>
       </StyledTopbar>
       {openLogin && (
-        <Modal open={openLogin} handleClose={() => setOpenLogin(false)}>
-          <SignInForm />
-        </Modal>
+        <Dialog open={openLogin} onClose={() => setOpenLogin(false)}>
+          <SignInForm handleSuccess={() => setOpenLogin(false)} />
+        </Dialog>
       )}
       {openLogout && (
-        <Modal open={openLogout} handleClose={() => setOpenLogout(false)}>
-          <SignOutForm />
-        </Modal>
+        <Dialog open={openLogout} onClose={() => setOpenLogout(false)}>
+          <SignOutForm handleSuccess={() => setOpenLogout(false)} />
+        </Dialog>
       )}
     </>
   )

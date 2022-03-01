@@ -32,7 +32,11 @@ export interface IUserLoginInput {
   newUser: boolean
 }
 
-export default function SignInForm() {
+interface ISignInFormProps {
+  handleSuccess: () => void
+}
+
+export default function SignInForm({ handleSuccess }: ISignInFormProps) {
   const dispatch = useAppDispatch()
   const {
     register,
@@ -47,7 +51,7 @@ export default function SignInForm() {
   const [feedbackData, setFeedbackData] = useState<IFeedbackAlertProps>({
     message: '',
     open: false,
-    type: 'success'
+    type: 'error'
   })
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -69,7 +73,13 @@ export default function SignInForm() {
   }
 
   useEffect(() => {
-    setTimeout(() => setFeedbackData({ ...feedbackData, open: false }), 2000)
+    const timer = setTimeout(() => {
+      setFeedbackData({ ...feedbackData, open: false })
+      if (feedbackData.type === 'success') {
+        handleSuccess()
+      }
+    }, 2000)
+    return () => clearTimeout(timer)
   }, [feedbackData.open])
 
   return (
