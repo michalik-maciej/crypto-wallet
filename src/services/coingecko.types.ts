@@ -27,6 +27,12 @@ export interface IMarketQuery {
   last_updated: string
 }
 
+export interface INameQuery {
+  id: string
+  symbol: string
+  name: string
+}
+
 export interface IPriceQuery {
   usd: string
 }

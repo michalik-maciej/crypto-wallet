@@ -1,10 +1,12 @@
 {
   "name": "halniak-crypto-wallet",
-  "homepage": ".",
+  "homepage": "https://michalik-maciej/github.io/crypto-wallet-frontend",
   "version": "1.0.0",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
@@ -40,6 +42,7 @@
     "@testing-library/user-event": "^13.2.1",
     "@types/shortid": "^0.0.29",
     "enzyme": "^3.11.0",
+    "gh-pages": "^3.2.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^7.26.1",
