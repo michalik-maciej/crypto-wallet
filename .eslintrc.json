@@ -78,6 +78,7 @@
     "semi": 0,
     "react/react-in-jsx-scope": 0,
     "no-underscore-dangle": 0,
+    "import/no-named-as-default": 0,
     "react/jsx-uses-react": 0
   }
 }

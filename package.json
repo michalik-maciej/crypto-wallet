@@ -1,6 +1,6 @@
 {
   "name": "halniak-crypto-wallet",
-  "homepage": "https://michalik-maciej/github.io/crypto-wallet-frontend",
+  "homepage": ".",
   "version": "1.0.0",
   "scripts": {
     "start": "react-scripts start",
