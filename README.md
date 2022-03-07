@@ -35,16 +35,17 @@ into a common root directory
 *Server side*
 ```
 git clone git@github.com:michalik-maciej/crypto-wallet-backend.git
-cd crypto-wallet-backend && yarn
+cd crypto-wallet-backend && npm install
 ```
 
 *Client side*
 ```
 git clone git@github.com:michalik-maciej/crypto-wallet-frontend.git
-cd crypto-wallet-frontend && yarn
+cd crypto-wallet-frontend && npm install
 ```
 
 ### Run the app
 ```
-cd crypto-wallet-backend && yarn start
+cd crypto-wallet-backend && npm run start
+cd ../crypto-wallet-frontend && npm run start
 ```
