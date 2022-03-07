@@ -1,35 +1,60 @@
-import { IMarketQuery } from '../../../services/coingecko.types'
-import { IFormProps } from './Form'
-import { IMarketProps } from './Market'
+/* eslint-disable camelcase */
+import { IChartQuery, IMarketQuery } from '../../../services/coingecko.types'
+import { timestampToDate } from '../../../utils/utils'
+import { IFormProps } from './CoinPage.form'
+import { IMarketProps } from './CoinPage.market'
+// import { IChartProps } from './CoinPage.chart'
 
-export interface IDataFormatterProps {
-  coinId: string
-  market: IMarketProps
-  form: IFormProps
+export interface IMarketDataFormatterProps {
+  id: string
+  marketProps: IMarketProps
+  formProps: IFormProps
 }
 
-export default function DataFormatter(
-  coinData: IMarketQuery
-): IDataFormatterProps {
+export function marketDataFormatter({
+  id,
+  name,
+  image,
+  market_cap_rank,
+  current_price,
+  price_change_percentage_24h,
+  symbol
+}: IMarketQuery): IMarketDataFormatterProps {
   return {
-    coinId: coinData.id,
-    market: {
-      name: coinData.name,
-      symbol: coinData.symbol.toUpperCase(),
-      logo: coinData.image,
-      rank: `#${coinData.market_cap_rank}`,
-      price: `$${coinData.current_price.toLocaleString('en-us')}`,
+    id,
+    marketProps: {
+      name,
+      ticker: symbol.toUpperCase(),
+      logo: image,
+      rank: `#${market_cap_rank}`,
+      price: `$${current_price.toLocaleString('en-us')}`,
       priceChange: {
-        label: `${coinData.price_change_percentage_24h.toFixed(2)}%`,
-        positive: coinData.price_change_percentage_24h >= 0
+        label: `${price_change_percentage_24h.toFixed(2)}%`,
+        positive: price_change_percentage_24h >= 0
       }
     },
-    form: {
-      originalId: coinData.id,
-      price: coinData.current_price,
-      name: coinData.name,
-      symbol: coinData.symbol.toUpperCase(),
-      logo: coinData.image
+    formProps: {
+      originalId: id,
+      price: current_price,
+      name,
+      ticker: symbol.toUpperCase(),
+      logo: image
     }
   }
+}
+
+export function chartDataFormatter(rawChartData: IChartQuery): any {
+  const headers = ['time', 'open', 'high', 'low', 'close']
+  const chartData = rawChartData.map((datapoint) =>
+    Object.fromEntries(
+      headers.map((header, i) => {
+        if (header === 'time') {
+          return [headers[i], timestampToDate(datapoint[i])]
+        }
+        return [headers[i], datapoint[i]]
+      })
+    )
+  )
+
+  return chartData
 }
