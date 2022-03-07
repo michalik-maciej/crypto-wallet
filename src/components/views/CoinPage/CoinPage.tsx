@@ -1,16 +1,17 @@
 import Container from '@mui/material/Container'
 import Grid from '@mui/material/Grid'
 import Paper from '@mui/material/Paper'
-import { styled } from '@mui/material/styles'
 import { useNavigate, useParams } from 'react-router-dom'
 import UndoRoundedIcon from '@mui/icons-material/UndoRounded'
 import IconButton from '@mui/material/IconButton'
-import Box from '@mui/material/Box'
-import { IMarketQuery } from '../../../services/coingecko.types'
-import { useGetCoinsMarketQuery } from '../../../services/coingecko'
-import Market from './Market'
-import Form from './Form'
-import DataFormatter from './CoinPage.helper'
+import { IChartQuery, IMarketQuery } from '../../../services/coingecko.types'
+import {
+  useGetCoinChartQuery,
+  useGetCoinsMarketQuery
+} from '../../../services/coingecko'
+import Market from './CoinPage.market'
+import Form from './CoinPage.form'
+import { marketDataFormatter } from './CoinPage.helper'
 
 type CoinPageParams = {
   coinId: string
@@ -19,49 +20,62 @@ type CoinPageParams = {
 export default function CoinPage() {
   const { coinId } = useParams<CoinPageParams>()
   const navigate = useNavigate()
-  const { data: rawCoinsData } = useGetCoinsMarketQuery<{
+  const { data: rawMarketData } = useGetCoinsMarketQuery<{
     data: IMarketQuery[]
   }>(null)
 
-  const currentCoinRaw = rawCoinsData.find((coin) => coin.id === coinId)
-  let currentCoin
-  if (!currentCoinRaw) {
-    currentCoin = DataFormatter(rawCoinsData[0])
+  const { data: rawChartData } = useGetCoinChartQuery<{
+    data: IChartQuery
+  }>(coinId)
+
+  const currentCoinRawMarketData = rawMarketData.find(
+    (coin) => coin.id === coinId
+  )
+  let currentCoinMarketData
+  if (currentCoinRawMarketData && rawChartData) {
+    currentCoinMarketData = marketDataFormatter(currentCoinRawMarketData)
   } else {
-    currentCoin = DataFormatter(currentCoinRaw)
+    currentCoinMarketData = marketDataFormatter(rawMarketData[0])
   }
 
-  const StyledPaper = styled(Paper)({
+  const PaperStyle = {
     display: 'flex',
     padding: '1.5rem',
     margin: '0',
-    flexDirection: 'column'
-  })
+    flexDirection: 'column',
+    minHeight: '100%'
+  }
 
-  const { form, market } = currentCoin
+  const { formProps, marketProps } = currentCoinMarketData
   const sections = [
-    { id: 'market', component: <Market {...market} /> },
-    { id: 'form', component: <Form {...form} /> }
+    { sectionId: 'market', component: <Market {...marketProps} /> },
+    { sectionId: 'form', component: <Form {...formProps} /> }
   ]
 
   return (
     <Container>
-      <Box
-        sx={{ position: 'absolute', top: 96, right: 16 }}
-        onClick={() => navigate(-1)}
-      >
-        <IconButton
-          aria-label="back to homepage"
-          size="small"
-          sx={{ border: '3px solid #666', position: 'right' }}
+      <Grid container spacing={2} sx={{}}>
+        <Grid
+          item
+          xs={12}
+          sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}
         >
-          <UndoRoundedIcon fontSize="inherit" />
-        </IconButton>
-      </Box>
-      <Grid container spacing={1}>
-        {sections.map(({ id, component }) => (
-          <Grid key={id} item xs={12} md={6}>
-            <StyledPaper elevation={3}>{component}</StyledPaper>
+          <IconButton
+            aria-label="back to homepage"
+            size="small"
+            onClick={() => navigate(-1)}
+            sx={{
+              border: '3px solid #666'
+            }}
+          >
+            <UndoRoundedIcon fontSize="inherit" />
+          </IconButton>
+        </Grid>
+        {sections.map(({ sectionId, component }) => (
+          <Grid key={sectionId} item xs={12} md={6}>
+            <Paper sx={PaperStyle} elevation={3}>
+              {component}
+            </Paper>
           </Grid>
         ))}
       </Grid>

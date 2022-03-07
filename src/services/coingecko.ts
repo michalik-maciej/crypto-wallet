@@ -18,8 +18,7 @@ export const coingeckoApi = createApi({
       query: (coinIds) => `/simple/price?ids=${coinIds}&vs_currencies=usd`
     }),
     getCoinChart: builder.query({
-      query: (coinId) =>
-        `/coins/${coinId}/market_chart?vs_currency=usd&days=90&interval=daily`
+      query: (coinId) => `/coins/${coinId}/ohlc?vs_currency=usd&days=365`
     })
   })
 })

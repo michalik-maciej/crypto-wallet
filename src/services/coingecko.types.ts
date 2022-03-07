@@ -36,3 +36,5 @@ export interface INameQuery {
 export interface IPriceQuery {
   usd: string
 }
+
+export type IChartQuery = [number, number, number, number, number][]

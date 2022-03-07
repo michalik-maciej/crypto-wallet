@@ -2,7 +2,9 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { IUserLoginInput, IUserLoginOutput } from './local.types'
 
 const API_URL =
-  process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:8011/api'
+  process.env.NODE_ENV === 'production'
+    ? 'https://us-central1-halniak-crypto-wallet.cloudfunctions.net/hello/api'
+    : 'http://localhost:8011/api'
 
 export const localApi = createApi({
   reducerPath: 'localApi',
