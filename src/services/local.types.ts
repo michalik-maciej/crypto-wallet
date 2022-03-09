@@ -11,7 +11,7 @@ export interface IUserCoin {
   logo: string
   name: string
   originalId: string
-  symbol: string
+  ticker: string
 }
 
 export interface IUserQuery {

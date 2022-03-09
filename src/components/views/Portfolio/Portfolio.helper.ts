@@ -6,7 +6,7 @@ export interface ISingleAsset {
     originalId: string
     logo: string
     name: string
-    symbol: string
+    ticker: string
   }
   holdings: { original: number; usd: number }
   netCost: number
