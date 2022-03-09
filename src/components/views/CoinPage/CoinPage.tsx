@@ -4,11 +4,8 @@ import Paper from '@mui/material/Paper'
 import { useNavigate, useParams } from 'react-router-dom'
 import UndoRoundedIcon from '@mui/icons-material/UndoRounded'
 import IconButton from '@mui/material/IconButton'
-import { IChartQuery, IMarketQuery } from '../../../services/coingecko.types'
-import {
-  useGetCoinChartQuery,
-  useGetCoinsMarketQuery
-} from '../../../services/coingecko'
+import { IMarketQuery } from '../../../services/coingecko.types'
+import { useGetCoinsMarketQuery } from '../../../services/coingecko'
 import Market from './CoinPage.market'
 import Form from './CoinPage.form'
 import { marketDataFormatter } from './CoinPage.helper'
@@ -24,15 +21,11 @@ export default function CoinPage() {
     data: IMarketQuery[]
   }>(null)
 
-  const { data: rawChartData } = useGetCoinChartQuery<{
-    data: IChartQuery
-  }>(coinId)
-
   const currentCoinRawMarketData = rawMarketData.find(
     (coin) => coin.id === coinId
   )
   let currentCoinMarketData
-  if (currentCoinRawMarketData && rawChartData) {
+  if (currentCoinRawMarketData) {
     currentCoinMarketData = marketDataFormatter(currentCoinRawMarketData)
   } else {
     currentCoinMarketData = marketDataFormatter(rawMarketData[0])

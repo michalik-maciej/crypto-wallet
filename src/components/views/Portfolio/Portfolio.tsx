@@ -102,7 +102,7 @@ export default function Portfolio() {
                           >
                             {coin.name}
                           </Box>
-                          <Box sx={{ fontWeight: 600 }}>{coin.symbol}</Box>
+                          <Box sx={{ fontWeight: 600 }}>{coin.ticker}</Box>
                         </Stack>
                       </TableCell>
                       <TableCell>
@@ -122,7 +122,7 @@ export default function Portfolio() {
                             })}
                           </Box>
                           <Box>
-                            {holdings.original} {coin.symbol}
+                            {holdings.original} {coin.ticker}
                           </Box>
                         </Stack>
                       </TableCell>

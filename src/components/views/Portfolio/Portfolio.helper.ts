@@ -6,7 +6,7 @@ export interface ISingleAsset {
     originalId: string
     logo: string
     name: string
-    symbol: string
+    ticker: string
   }
   holdings: { original: number; usd: number }
   netCost: number
@@ -29,7 +29,7 @@ export default function DataFormatter(
   ) {
     const { coins, transactions } = userData
     assets = coins.map((coin) => ({
-      coin: { ...coin },
+      coin: { ...coin, ticker: coin.symbol },
       holdings: { original: 0, usd: 0 },
       netCost: 0,
       currentPrice: 0,
