@@ -24,7 +24,7 @@ export function marketDataFormatter({
     id,
     marketProps: {
       name,
-      ticker: symbol.toUpperCase(),
+      symbol: symbol.toUpperCase(),
       logo: image,
       rank: `#${market_cap_rank}`,
       price: `$${current_price.toLocaleString('en-us')}`,
@@ -37,7 +37,7 @@ export function marketDataFormatter({
       originalId: id,
       price: current_price,
       name,
-      ticker: symbol.toUpperCase(),
+      symbol: symbol.toUpperCase(),
       logo: image
     }
   }

@@ -18,7 +18,7 @@ import isResponseError from '../../../services/local.helpers'
 export interface IFormProps {
   originalId: string
   price: number
-  ticker: string
+  symbol: string
   name: string
   logo: string
 }
@@ -37,7 +37,7 @@ export interface ITransactionInput {
 
 export default function Form({
   originalId,
-  ticker,
+  symbol,
   logo,
   price,
   name
@@ -61,7 +61,7 @@ export default function Form({
       const inputData = {
         ...formData,
         userId,
-        coin: { originalId, name, ticker, logo },
+        coin: { originalId, name, symbol, logo },
         timestamp: Date.now()
       }
       const { message } = await postTransaction(inputData).unwrap()
@@ -104,7 +104,7 @@ export default function Form({
               <TextInput
                 id="coinQuantity"
                 adornment=""
-                label={`${ticker} quantity`}
+                label={`${symbol} quantity`}
                 value={coinAmount}
                 setValue={setCoinAmount}
               />

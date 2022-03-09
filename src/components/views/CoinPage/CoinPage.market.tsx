@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 
 export interface IMarketProps {
-  ticker: string
+  symbol: string
   name: string
   logo: string
   rank: string
@@ -21,7 +21,7 @@ const StyledChip = {
 
 export default function Market({
   logo,
-  ticker,
+  symbol,
   name,
   rank,
   price,
@@ -58,10 +58,10 @@ export default function Market({
         }}
       >
         <Stack spacing={1} direction="row" sx={{ flexWrap: 'wrap' }}>
-          <Chip sx={StyledChip} label={ticker} />
+          <Chip sx={StyledChip} label={symbol} />
           <Chip
             sx={StyledChip}
-            avatar={<Avatar alt={`${ticker} logo`} src={logo} />}
+            avatar={<Avatar alt={`${symbol} logo`} src={logo} />}
             label={`Rank ${rank}`}
           />
           <Chip
