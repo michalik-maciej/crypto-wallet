@@ -14,6 +14,8 @@ import FeedbackAlert, {
   IFeedbackAlertProps
 } from '../../common/FeedbackAlert/FeedbackAlert'
 import isResponseError from '../../../services/local.helpers'
+import portfolioSettings from '../../../settings/settings'
+import { formatToUSD } from '../../../utils/utils'
 
 export interface IFormProps {
   originalId: string
@@ -44,7 +46,7 @@ export default function Form({
 }: IFormProps) {
   const [postTransaction] = usePostTransactionMutation()
   const userId = useAppSelector((state: RootState) => getUserId(state))
-  const [coinAmount, setCoinAmount] = useState(1)
+  const [coinAmount, setCoinAmount] = useState(0)
   const [coinPrice, setCoinPrice] = useState(price)
   const methods = useForm<ITransactionInput>({
     resolver: yupResolver(validationSchema)
@@ -59,6 +61,7 @@ export default function Form({
   const submitForm = async (formData: ITransactionInput) => {
     try {
       const inputData = {
+        subWalletLabel: 'black',
         ...formData,
         userId,
         coin: { originalId, name, symbol, logo },
@@ -118,8 +121,20 @@ export default function Form({
                 setValue={setCoinPrice}
               />
             </Grid>
+            {userId === '622de8e0af979f16e7bdb670' && (
+              <Grid
+                item
+                xs={12}
+                sx={{ display: 'flex', justifyContent: 'center' }}
+              >
+                <RadioInput
+                  groupName="subWalletLabel"
+                  labels={portfolioSettings.map(({ label }) => label)}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sx={{ fontWeight: 'bold' }}>
-              Total: ${(coinAmount * coinPrice).toLocaleString('en-us')}
+              Total: {formatToUSD(coinAmount * coinPrice)}
             </Grid>
             <Grid item sx={{ margin: 'auto' }}>
               <Button type="submit" variant="contained">

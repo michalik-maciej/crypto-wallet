@@ -1,5 +1,6 @@
 export interface IUserTransaction {
   coinId: string
+  subWalletLabel: string
   coinQuantity: number
   pricePerCoin: number
   type: string
