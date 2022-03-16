@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 import { IChartQuery, IMarketQuery } from '../../../services/coingecko.types'
-import { timestampToDate } from '../../../utils/utils'
+import { timestampToDate, formatToUSD } from '../../../utils/utils'
 import { IFormProps } from './CoinPage.form'
 import { IMarketProps } from './CoinPage.market'
+
 // import { IChartProps } from './CoinPage.chart'
 
 export interface IMarketDataFormatterProps {
@@ -27,7 +28,7 @@ export function marketDataFormatter({
       symbol: symbol.toUpperCase(),
       logo: image,
       rank: `#${market_cap_rank}`,
-      price: `$${current_price.toLocaleString('en-us')}`,
+      price: formatToUSD(current_price),
       priceChange: {
         label: `${price_change_percentage_24h.toFixed(2)}%`,
         positive: price_change_percentage_24h >= 0

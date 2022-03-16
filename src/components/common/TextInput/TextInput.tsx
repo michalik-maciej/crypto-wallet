@@ -34,7 +34,7 @@ export default function TextInput({
         id={id}
         type="number"
         inputProps={{ min: 0 }}
-        value={value}
+        value={value || ''}
         error={!!errors[id]}
         onChange={(event) =>
           setValue(

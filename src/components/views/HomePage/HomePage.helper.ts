@@ -1,4 +1,5 @@
 import { IMarketQuery } from '../../../services/coingecko.types'
+import { formatToUSD } from '../../../utils/utils'
 
 export interface IFormattedCoinData {
   coinId: string
@@ -25,7 +26,7 @@ export default function DataFormatter(
       }
     },
     price: {
-      data: `$${coinData.current_price.toLocaleString('en-us')}`
+      data: formatToUSD(coinData.current_price)
     },
     priceChange: {
       data: {
@@ -33,6 +34,6 @@ export default function DataFormatter(
         positive: coinData.price_change_percentage_24h >= 0
       }
     },
-    marketCap: { data: `$${coinData.market_cap.toLocaleString('en-us')}` }
+    marketCap: { data: formatToUSD(coinData.market_cap) }
   }
 }
