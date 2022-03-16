@@ -61,7 +61,7 @@ export default function Form({
   const submitForm = async (formData: ITransactionInput) => {
     try {
       const inputData = {
-        subWalletLabel: 'black',
+        subWalletLabel: 'green',
         ...formData,
         userId,
         coin: { originalId, name, symbol, logo },
@@ -121,7 +121,7 @@ export default function Form({
                 setValue={setCoinPrice}
               />
             </Grid>
-            {userId === '622de8e0af979f16e7bdb670' && (
+            {userId === `622de8e0af979f16e7bdb670` && (
               <Grid
                 item
                 xs={12}

@@ -1,13 +1,7 @@
+import { useState } from 'react'
 import Box from '@mui/material/Box'
-import Table from '@mui/material/Table'
-import TableBody from '@mui/material/TableBody'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import { useNavigate } from 'react-router-dom'
-import Stack from '@mui/material/Stack'
-import Avatar from '@mui/material/Avatar'
-import TableCell from '@mui/material/TableCell'
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import Typography from '@mui/material/Typography'
 import { RootState } from '../../../redux/store'
 import { useGetUserTransactionsQuery } from '../../../services/local'
 import { useGetCurrentPriceQuery } from '../../../services/coingecko'
@@ -16,10 +10,12 @@ import { useAppSelector } from '../../../redux/hooks'
 import { getUserId } from '../../../redux/userSlice'
 import { IUserQuery } from '../../../services/local.types'
 import ProgressBar from '../../common/ProgressBar/ProgressBar'
+import Tabs from '../../common/Tabs/Tabs'
+import portfolioSettings from '../../../settings/settings'
+import SubWallet from '../../features/SubWallet/SubWallet'
 import dataFormatter from './Portfolio.helper'
 
 export default function Portfolio() {
-  const navigate = useNavigate()
   const userId = useAppSelector((state: RootState) => getUserId(state))
 
   const {
@@ -34,20 +30,27 @@ export default function Portfolio() {
     data: IUserQuery
   }>(userId)
 
+  const [currentSubWalletLabel, setCurrentSubWalletLabel] = useState(
+    portfolioSettings[0].label
+  )
   const coinIds = rawUserData?.coins?.map(({ originalId }) => originalId)
   const { data: currentPrices } = useGetCurrentPriceQuery<{
     data: Record<string, IPriceQuery>
   }>(coinIds?.join('%2C'))
-  const userData = dataFormatter(rawUserData, currentPrices)
 
-  const columnHeaders = [
-    { id: 'name', caption: 'Name' },
-    { id: 'price', caption: 'Price' },
-    { id: 'holdings', caption: 'Holdings' }
-  ]
+  const { assets, total } = dataFormatter(rawUserData, currentPrices).find(
+    ({ id }) => id === currentSubWalletLabel
+  ) || { assets: [], total: { netCost: 0, holdings: 0 } }
 
   return (
     <>
+      {userId === `622de8e0af979f16e7bdb670` && (
+        <Tabs
+          tabConfig={portfolioSettings}
+          getValue={currentSubWalletLabel}
+          setValue={setCurrentSubWalletLabel}
+        />
+      )}
       {isLoading && <ProgressBar>Loading</ProgressBar>}
       {error && (
         <div>
@@ -56,82 +59,12 @@ export default function Portfolio() {
       )}
       {isSuccess && (
         <>
-          {!userData.assets.length && <h2>Add your first transaction</h2>}
-          {!!userData.assets.length && (
-            <>
-              {' '}
-              <h2>Portfolio ${userData.total.toLocaleString('en-us')}</h2>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    {columnHeaders.map(({ id, caption }) => (
-                      <TableCell
-                        key={id}
-                        sx={{
-                          fontWeight: 600,
-                          ...(id === 'marketCap' && {
-                            display: { xs: 'none', sm: 'block' }
-                          })
-                        }}
-                      >
-                        {caption}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {userData.assets.map(({ coin, currentPrice, holdings }) => (
-                    <TableRow
-                      key={coin.originalId}
-                      hover
-                      onClick={() => navigate(`/coins/${coin.originalId}`)}
-                      sx={{ textDecoration: 'none', cursor: 'pointer' }}
-                    >
-                      <TableCell>
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Avatar
-                            src={coin.logo}
-                            sx={{ height: '1.5rem', width: '1.5rem' }}
-                            alt={`${coin.name} logo`}
-                          />
-                          <Box
-                            sx={{
-                              width: '40%',
-                              display: { xs: 'none', md: 'block' }
-                            }}
-                          >
-                            {coin.name}
-                          </Box>
-                          <Box sx={{ fontWeight: 600 }}>{coin.symbol}</Box>
-                        </Stack>
-                      </TableCell>
-                      <TableCell>
-                        $
-                        {currentPrice.toLocaleString('en-US', {
-                          maximumFractionDigits: 2
-                        })}
-                      </TableCell>
-                      <TableCell>
-                        {' '}
-                        <Stack direction="row" alignItems="center" spacing={2}>
-                          <Box sx={{ fontWeight: 600 }}>
-                            $
-                            {holdings.usd.toLocaleString('en-US', {
-                              maximumFractionDigits: 2,
-                              minimumFractionDigits: 2
-                            })}
-                          </Box>
-                          <Box>
-                            {holdings.original} {coin.symbol}
-                          </Box>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </>
-          )}
+          <Box sx={{ m: 2 }}>
+            {!assets.length && (
+              <Typography variant="h4">Add your first transaction</Typography>
+            )}
+          </Box>
+          {!!assets.length && <SubWallet assets={assets} total={total} />}
         </>
       )}
     </>

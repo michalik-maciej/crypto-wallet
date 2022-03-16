@@ -1,5 +1,6 @@
 import { IUserQuery } from '../../../services/local.types'
 import { IPriceQuery } from '../../../services/coingecko.types'
+import { ISubWalletProps } from '../../features/SubWallet/SubWallet'
 
 export interface ISingleAsset {
   coin: {
@@ -14,27 +15,52 @@ export interface ISingleAsset {
   profit: number
 }
 
+export interface ISubWallet extends ISubWalletProps {
+  id: string
+}
+
 export default function DataFormatter(
   userData: IUserQuery,
   currentPrices: Record<string, IPriceQuery>
 ) {
-  let assets: ISingleAsset[] = []
-  let total = 0
-  if (
-    userData?.coins &&
-    userData?.transactions &&
-    currentPrices &&
-    Object.entries(currentPrices).length > 0 &&
-    currentPrices.constructor === Object
-  ) {
-    const { coins, transactions } = userData
-    assets = coins.map((coin) => ({
-      coin: { ...coin, symbol: coin.symbol },
-      holdings: { original: 0, usd: 0 },
-      netCost: 0,
-      currentPrice: 0,
-      profit: 0
+  function dataIsValid(data: IUserQuery) {
+    return (
+      data?.coins &&
+      data?.transactions &&
+      currentPrices &&
+      Object.entries(currentPrices).length > 0 &&
+      currentPrices.constructor === Object
+    )
+  }
+
+  function initSubWallets(data: IUserQuery) {
+    const walletLabels = [
+      ...new Set(data.transactions.map(({ subWalletLabel }) => subWalletLabel))
+    ]
+    const output = walletLabels.map((label) => ({
+      id: label,
+      assets: [
+        ...data.coins.map((coin) => ({
+          coin,
+          holdings: { original: 0, usd: 0 },
+          netCost: 0,
+          currentPrice: 0,
+          profit: 0
+        }))
+      ],
+      total: { holdings: 0, netCost: 0 }
     }))
+
+    return output
+  }
+
+  function mapTransactionsToAssets({
+    assets,
+    transactions
+  }: {
+    assets: ISingleAsset[]
+    transactions: IUserQuery['transactions']
+  }) {
     transactions.forEach(({ coinId, coinQuantity, type, pricePerCoin }) => {
       const asset = assets.find(({ coin }) => coin.originalId === coinId)
 
@@ -49,16 +75,40 @@ export default function DataFormatter(
         }
       }
     })
+    return transactions
+  }
+
+  function formatSubWallet({ assets, total }: ISubWallet) {
     assets.forEach((a) => {
       a.currentPrice = parseFloat(currentPrices[a.coin.originalId].usd)
       a.holdings.usd = a.holdings.original * a.currentPrice
       a.profit = a.holdings.usd - a.netCost
-      total += a.holdings.usd
-      const index = assets.indexOf(a)
-      if (a.holdings.original === 0) assets.splice(index, 1)
+      total.holdings += a.holdings.usd
+      total.netCost += a.netCost
     })
     assets.sort((a, b) => (a.holdings.usd > b.holdings.usd ? -1 : 1))
+
+    return assets.filter((a) => a.holdings.original > 0)
   }
 
-  return { assets, total }
+  let subWallets: ISubWallet[] = []
+  // validate input data
+  if (dataIsValid(userData)) {
+    // init subWallets from user data
+    subWallets = initSubWallets(userData)
+
+    // map transactions to assets in each subwallet
+    subWallets.forEach((wallet) => {
+      mapTransactionsToAssets({
+        assets: wallet.assets,
+        transactions: userData.transactions.filter(
+          (transaction) => transaction.subWalletLabel === wallet.id
+        )
+      })
+      // recalculate sort and filter
+      wallet.assets = formatSubWallet(wallet)
+    })
+  }
+
+  return subWallets
 }

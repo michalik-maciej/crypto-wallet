@@ -20,17 +20,17 @@ export default function RadioInput({ groupName, labels }: RadioInputProps) {
             {...register(groupName)}
             key={label}
             value={label.toLowerCase()}
-            label={groupName !== 'subWallet' ? capitalize(label) : ''}
+            label={groupName !== `subWalletLabel` ? capitalize(label) : ''}
             control={
               <Radio
                 sx={{
                   color:
-                    groupName === 'subWallet'
+                    groupName === `subWalletLabel`
                       ? label
                       : theme.palette.primary.main,
                   '&.Mui-checked': {
                     color:
-                      groupName === 'subWallet'
+                      groupName === `subWalletLabel`
                         ? label
                         : theme.palette.primary.main
                   }
