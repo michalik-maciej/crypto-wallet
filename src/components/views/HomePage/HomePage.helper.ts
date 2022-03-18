@@ -1,4 +1,4 @@
-import { IMarketQuery } from '../../../services/coingecko.types'
+import { IMarketQueryResponse } from '../../../services/coingecko.types'
 import { formatToUSD } from '../../../utils/utils'
 
 export interface IFormattedCoinData {
@@ -11,7 +11,7 @@ export interface IFormattedCoinData {
 }
 
 export default function DataFormatter(
-  coinData: IMarketQuery
+  coinData: IMarketQueryResponse
 ): IFormattedCoinData {
   return {
     coinId: coinData.id,

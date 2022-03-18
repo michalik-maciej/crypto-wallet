@@ -8,8 +8,13 @@ export const coingeckoApi = createApi({
       query: () => `/ping`
     }),
     getCoinsMarket: builder.query({
-      query: () =>
-        `/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false`
+      query: (coinId) => {
+        let ids = ``
+        if (coinId) {
+          ids = `&ids=${coinId}`
+        }
+        return `/coins/markets?vs_currency=usd${ids}&order=market_cap_desc&per_page=50&page=1&sparkline=false`
+      }
     }),
     getCoinsList: builder.query({
       query: () => `/coins/list`

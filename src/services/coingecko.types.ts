@@ -1,4 +1,4 @@
-export interface IMarketQuery {
+export interface IMarketQueryResponse {
   id: string
   symbol: string
   name: string
@@ -27,14 +27,14 @@ export interface IMarketQuery {
   last_updated: string
 }
 
-export interface INameQuery {
+export interface INameQueryResponse {
   id: string
   symbol: string
   name: string
 }
 
-export interface IPriceQuery {
+export interface IPriceQueryResponse {
   usd: string
 }
 
-export type IChartQuery = [number, number, number, number, number][]
+export type IChartQueryResponse = [number, number, number, number, number][]

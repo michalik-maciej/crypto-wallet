@@ -15,7 +15,7 @@ export interface IUserCoin {
   symbol: string
 }
 
-export interface IUserQuery {
+export interface IUserQueryResponse {
   transactions: IUserTransaction[]
   coins: IUserCoin[]
 }

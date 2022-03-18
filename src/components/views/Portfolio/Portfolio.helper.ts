@@ -1,5 +1,5 @@
-import { IUserQuery } from '../../../services/local.types'
-import { IPriceQuery } from '../../../services/coingecko.types'
+import { IUserQueryResponse } from '../../../services/local.types'
+import { IPriceQueryResponse } from '../../../services/coingecko.types'
 import { ISubWalletProps } from '../../features/SubWallet/SubWallet'
 
 export interface ISingleAsset {
@@ -20,10 +20,10 @@ export interface ISubWallet extends ISubWalletProps {
 }
 
 export default function DataFormatter(
-  userData: IUserQuery,
-  currentPrices: Record<string, IPriceQuery>
+  userData: IUserQueryResponse,
+  currentPrices: Record<string, IPriceQueryResponse>
 ) {
-  function dataIsValid(data: IUserQuery) {
+  function dataIsValid(data: IUserQueryResponse) {
     return (
       data?.coins &&
       data?.transactions &&
@@ -33,7 +33,7 @@ export default function DataFormatter(
     )
   }
 
-  function initSubWallets(data: IUserQuery) {
+  function initSubWallets(data: IUserQueryResponse) {
     const walletLabels = [
       ...new Set(data.transactions.map(({ subWalletLabel }) => subWalletLabel))
     ]
@@ -59,7 +59,7 @@ export default function DataFormatter(
     transactions
   }: {
     assets: ISingleAsset[]
-    transactions: IUserQuery['transactions']
+    transactions: IUserQueryResponse['transactions']
   }) {
     transactions.forEach(({ coinId, coinQuantity, type, pricePerCoin }) => {
       const asset = assets.find(({ coin }) => coin.originalId === coinId)

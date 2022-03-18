@@ -1,5 +1,8 @@
 /* eslint-disable camelcase */
-import { IChartQuery, IMarketQuery } from '../../../services/coingecko.types'
+import {
+  IChartQueryResponse,
+  IMarketQueryResponse
+} from '../../../services/coingecko.types'
 import { timestampToDate, formatToUSD } from '../../../utils/utils'
 import { IFormProps } from './CoinPage.form'
 import { IMarketProps } from './CoinPage.market'
@@ -20,7 +23,7 @@ export function marketDataFormatter({
   current_price,
   price_change_percentage_24h,
   symbol
-}: IMarketQuery): IMarketDataFormatterProps {
+}: IMarketQueryResponse): IMarketDataFormatterProps {
   return {
     id,
     marketProps: {
@@ -44,7 +47,7 @@ export function marketDataFormatter({
   }
 }
 
-export function chartDataFormatter(rawChartData: IChartQuery): any {
+export function chartDataFormatter(rawChartData: IChartQueryResponse): any {
   const headers = ['time', 'open', 'high', 'low', 'close']
   const chartData = rawChartData.map((datapoint) =>
     Object.fromEntries(

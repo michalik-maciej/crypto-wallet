@@ -3,8 +3,8 @@ import Table from '@mui/material/Table'
 import TableCell from '@mui/material/TableCell'
 import TableRow from '@mui/material/TableRow'
 import TableHead from '@mui/material/TableHead'
-import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
+import Box from '@mui/material/Box'
 import TableBody from '@mui/material/TableBody'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
@@ -32,6 +32,11 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
       value: formatToUSD(total.netCost)
     },
     {
+      id: 'currentValue',
+      caption: 'Current value',
+      value: formatToUSD(total.holdings)
+    },
+    {
       id: 'profit',
       caption: 'Profit',
       value: formatToUSD(total.holdings - total.netCost)
@@ -40,19 +45,21 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
 
   return (
     <>
-      {!!assets.length &&
-        totalBalance.map((item) => (
-          <Box key={item.id}>
-            <Typography
-              variant="subtitle2"
-              sx={{ fontWeight: 600 }}
-              data-testid="portfolio-heading"
-            >
-              {item.caption}
-            </Typography>
-            <Typography variant="h5">{item.value}</Typography>
-          </Box>
-        ))}
+      <Stack direction="row" spacing={5} my={4}>
+        {!!assets.length &&
+          totalBalance.map((item) => (
+            <Box key={item.id}>
+              <Typography
+                variant="subtitle2"
+                sx={{ fontWeight: 600 }}
+                data-testid="portfolio-heading"
+              >
+                {item.caption}
+              </Typography>
+              <Typography variant="h5">{item.value}</Typography>
+            </Box>
+          ))}
+      </Stack>
       <Table>
         <TableHead>
           <TableRow>

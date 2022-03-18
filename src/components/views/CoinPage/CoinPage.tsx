@@ -4,8 +4,10 @@ import Paper from '@mui/material/Paper'
 import { useNavigate, useParams } from 'react-router-dom'
 import UndoRoundedIcon from '@mui/icons-material/UndoRounded'
 import IconButton from '@mui/material/IconButton'
-import { IMarketQuery } from '../../../services/coingecko.types'
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { IMarketQueryResponse } from '../../../services/coingecko.types'
 import { useGetCoinsMarketQuery } from '../../../services/coingecko'
+import QueryStatusSwitch from '../../features/QueryStatusSwitch/QueryStatusSwitch'
 import Market from './CoinPage.market'
 import Form from './CoinPage.form'
 import { marketDataFormatter } from './CoinPage.helper'
@@ -17,18 +19,28 @@ type CoinPageParams = {
 export default function CoinPage() {
   const { coinId } = useParams<CoinPageParams>()
   const navigate = useNavigate()
-  const { data: rawMarketData } = useGetCoinsMarketQuery<{
-    data: IMarketQuery[]
-  }>(null)
 
-  const currentCoinRawMarketData = rawMarketData.find(
-    (coin) => coin.id === coinId
-  )
-  let currentCoinMarketData
-  if (currentCoinRawMarketData) {
-    currentCoinMarketData = marketDataFormatter(currentCoinRawMarketData)
-  } else {
-    currentCoinMarketData = marketDataFormatter(rawMarketData[0])
+  const {
+    isLoading,
+    error,
+    isSuccess,
+    data: rawMarketData
+  } = useGetCoinsMarketQuery<{
+    isLoading: boolean
+    isSuccess: boolean
+    error: FetchBaseQueryError
+    data: IMarketQueryResponse[]
+  }>(coinId)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let sections: any[] = []
+  if (isSuccess) {
+    const currentCoinMarketData = marketDataFormatter(rawMarketData[0])
+    const { formProps, marketProps } = currentCoinMarketData
+    sections = [
+      { sectionId: 'market', component: <Market {...marketProps} /> },
+      { sectionId: 'form', component: <Form {...formProps} /> }
+    ]
   }
 
   const PaperStyle = {
@@ -39,39 +51,35 @@ export default function CoinPage() {
     minHeight: '100%'
   }
 
-  const { formProps, marketProps } = currentCoinMarketData
-  const sections = [
-    { sectionId: 'market', component: <Market {...marketProps} /> },
-    { sectionId: 'form', component: <Form {...formProps} /> }
-  ]
-
   return (
-    <Container>
-      <Grid container spacing={2} sx={{}}>
-        <Grid
-          item
-          xs={12}
-          sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}
-        >
-          <IconButton
-            aria-label="back to homepage"
-            size="small"
-            onClick={() => navigate(-1)}
-            sx={{
-              border: '3px solid #666'
-            }}
+    <QueryStatusSwitch queryStatus={{ isLoading, isSuccess, error }}>
+      <Container>
+        <Grid container spacing={2} sx={{}}>
+          <Grid
+            item
+            xs={12}
+            sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}
           >
-            <UndoRoundedIcon fontSize="inherit" />
-          </IconButton>
-        </Grid>
-        {sections.map(({ sectionId, component }) => (
-          <Grid key={sectionId} item xs={12} md={6}>
-            <Paper sx={PaperStyle} elevation={3}>
-              {component}
-            </Paper>
+            <IconButton
+              aria-label="back to homepage"
+              size="small"
+              onClick={() => navigate(-1)}
+              sx={{
+                border: '3px solid #666'
+              }}
+            >
+              <UndoRoundedIcon fontSize="inherit" />
+            </IconButton>
           </Grid>
-        ))}
-      </Grid>
-    </Container>
+          {sections.map(({ sectionId, component }) => (
+            <Grid key={sectionId} item xs={12} md={6}>
+              <Paper sx={PaperStyle} elevation={3}>
+                {component}
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </QueryStatusSwitch>
   )
 }
