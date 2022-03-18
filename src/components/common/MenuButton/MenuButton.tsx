@@ -1,9 +1,8 @@
-import { ReactNode } from 'react'
 import { useTheme } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 
 interface IMenuButtonProps {
-  children: ReactNode
+  children: React.ReactNode
   label: string
   action: () => void
 }
