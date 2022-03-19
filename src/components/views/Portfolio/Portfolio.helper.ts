@@ -1,6 +1,9 @@
 import { IUserQueryResponse } from '../../../services/local.types'
 import { IPriceQueryResponse } from '../../../services/coingecko.types'
 import { ISubWalletProps } from '../../features/SubWallet/SubWallet'
+import portfolioSettings, {
+  IPortfolioSettings
+} from '../../../settings/settings'
 
 export interface ISingleAsset {
   coin: {
@@ -16,7 +19,7 @@ export interface ISingleAsset {
 }
 
 export interface ISubWallet extends ISubWalletProps {
-  id: string
+  portfolioId: IPortfolioSettings
 }
 
 export default function DataFormatter(
@@ -38,7 +41,10 @@ export default function DataFormatter(
       ...new Set(data.transactions.map(({ subWalletLabel }) => subWalletLabel))
     ]
     const output = walletLabels.map((label) => ({
-      id: label,
+      portfolioId: {
+        label,
+        color: portfolioSettings.find((item) => item.label === label)!.color
+      },
       assets: [
         ...data.coins.map((coin) => ({
           coin,
@@ -102,7 +108,8 @@ export default function DataFormatter(
       mapTransactionsToAssets({
         assets: wallet.assets,
         transactions: userData.transactions.filter(
-          (transaction) => transaction.subWalletLabel === wallet.id
+          (transaction) =>
+            transaction.subWalletLabel === wallet.portfolioId.label
         )
       })
       // recalculate sort and filter

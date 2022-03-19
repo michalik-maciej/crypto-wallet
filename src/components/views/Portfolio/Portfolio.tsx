@@ -7,7 +7,7 @@ import { useGetUserTransactionsQuery } from '../../../services/local'
 import { useGetCurrentPriceQuery } from '../../../services/coingecko'
 import { IPriceQueryResponse } from '../../../services/coingecko.types'
 import { useAppSelector } from '../../../redux/hooks'
-import { getUserId } from '../../../redux/userSlice'
+import { getUserId, getIsAdmin } from '../../../redux/userSlice'
 import { IUserQueryResponse } from '../../../services/local.types'
 import Tabs from '../../common/Tabs/Tabs'
 import portfolioSettings from '../../../settings/settings'
@@ -16,6 +16,7 @@ import QueryStatusSwitch from '../../features/QueryStatusSwitch/QueryStatusSwitc
 import dataFormatter from './Portfolio.helper'
 
 export default function Portfolio() {
+  const admin = useAppSelector((state: RootState) => getIsAdmin(state))
   const userId = useAppSelector((state: RootState) => getUserId(state))
 
   const {
@@ -30,25 +31,32 @@ export default function Portfolio() {
     data: IUserQueryResponse
   }>(userId)
 
-  const [currentSubWalletLabel, setCurrentSubWalletLabel] = useState(
-    portfolioSettings[0].label
-  )
+  const [currentSubWallet, setCurrentSubWallet] = useState(portfolioSettings[0])
   const coinIds = rawUserData?.coins?.map(({ originalId }) => originalId)
   const { data: currentPrices } = useGetCurrentPriceQuery<{
     data: Record<string, IPriceQueryResponse>
   }>(coinIds?.join('%2C'))
 
-  const { assets, total } = dataFormatter(rawUserData, currentPrices).find(
-    ({ id }) => id === currentSubWalletLabel
-  ) || { assets: [], total: { netCost: 0, holdings: 0 } }
+  const { assets, total, portfolioId } = dataFormatter(
+    rawUserData,
+    currentPrices
+  ).find(({ portfolioId: id }) => id.label === currentSubWallet.label) || {
+    portfolioId: currentSubWallet,
+    assets: [],
+    total: { netCost: 0, holdings: 0 }
+  }
 
   return (
     <QueryStatusSwitch queryStatus={{ isLoading, isSuccess, error }}>
-      {userId === `622de8e0af979f16e7bdb670` && (
+      {admin && (
         <Tabs
           tabConfig={portfolioSettings}
-          getValue={currentSubWalletLabel}
-          setValue={setCurrentSubWalletLabel}
+          getValue={currentSubWallet.label}
+          setValue={(tabInput) =>
+            setCurrentSubWallet(
+              portfolioSettings.find((wallet) => wallet.label === tabInput)!
+            )
+          }
         />
       )}
       <Box sx={{ m: 2 }}>
@@ -56,7 +64,9 @@ export default function Portfolio() {
           <Typography variant="h4">Add your first transaction</Typography>
         )}
       </Box>
-      {!!assets.length && <SubWallet assets={assets} total={total} />}
+      {!!assets.length && (
+        <SubWallet assets={assets} total={total} portfolioId={portfolioId} />
+      )}
     </QueryStatusSwitch>
   )
 }

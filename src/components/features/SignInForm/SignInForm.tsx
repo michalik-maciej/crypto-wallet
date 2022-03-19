@@ -62,9 +62,9 @@ export default function SignInForm({ handleSuccess }: ISignInFormProps) {
         const { message } = await createUser(inputData).unwrap()
         setFeedbackData({ message, type: 'success', open: true })
       } else {
-        const { userId, message } = await loginUser(inputData).unwrap()
+        const { userId, admin, message } = await loginUser(inputData).unwrap()
         setFeedbackData({ message, type: 'success', open: true })
-        dispatch(logUserIn(userId))
+        dispatch(logUserIn({ userId, admin }))
       }
     } catch (error) {
       if (isResponseError(error))

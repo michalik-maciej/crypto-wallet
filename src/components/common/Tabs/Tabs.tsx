@@ -1,10 +1,12 @@
-import Tabs from '@mui/material/Tabs'
-import Tab from '@mui/material/Tab'
+import Radio from '@mui/material/Radio'
+import RadioGroup from '@mui/material/RadioGroup'
+
 import { IPortfolioSettings } from '../../../settings/settings'
 
 interface ICustomTabsProps {
   tabConfig: IPortfolioSettings[]
   getValue: string
+  // eslint-disable-next-line no-unused-vars
   setValue: (a: string) => void
 }
 
@@ -14,19 +16,28 @@ export default function CustomTabs({
   setValue
 }: ICustomTabsProps) {
   return (
-    <Tabs value={getValue} onChange={(_e, val) => setValue(val)}>
-      {tabConfig.map(({ value, label }) => (
-        <Tab
-          key={value}
+    <RadioGroup
+      row
+      value={getValue}
+      onChange={(_e, val) => setValue(val)}
+      sx={{ m: 2, display: 'flex', justifyContent: 'flex-end' }}
+    >
+      {tabConfig.map(({ color, label }) => (
+        <Radio
+          key={color}
           value={label}
-          label={label}
           sx={{
+            mx: 1,
             fontWeight: 600,
-            color: value,
-            borderBottom: `5px solid ${value}`
+            border: `2px solid ${color}`,
+            borderRadius: '100%',
+            height: '1rem',
+            width: '1rem',
+            color,
+            '&.Mui-checked': { color }
           }}
         />
       ))}
-    </Tabs>
+    </RadioGroup>
   )
 }

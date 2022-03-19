@@ -1,7 +1,6 @@
 import Avatar from '@mui/material/Avatar'
 import Stack from '@mui/material/Stack'
 import Chip from '@mui/material/Chip'
-import { useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 
@@ -27,8 +26,6 @@ export default function Market({
   price,
   priceChange
 }: IMarketProps) {
-  const theme = useTheme()
-
   return (
     <Grid container spacing={2} sx={{ px: { xs: 0, sm: 12, md: 6 } }}>
       <Grid item xs={12}>
@@ -70,8 +67,8 @@ export default function Market({
               ...StyledChip,
               color: 'white',
               backgroundColor: priceChange.positive
-                ? theme.palette.success.main
-                : theme.palette.error.main
+                ? 'success.main'
+                : 'error.main'
             }}
           />
         </Stack>

@@ -11,17 +11,26 @@ import TableBody from '@mui/material/TableBody'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
-import { useTheme } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import { ISingleAsset } from '../../views/Portfolio/Portfolio.helper'
 import { formatToUSD } from '../../../utils/utils'
+import { IPortfolioSettings } from '../../../settings/settings'
 
 export interface ISubWalletProps {
   assets: ISingleAsset[]
   total: { holdings: number; netCost: number }
+  portfolioId: IPortfolioSettings
 }
 
-export default function SubWallet({ assets, total }: ISubWalletProps) {
-  const theme = useTheme()
+const StyledTableCell = styled(TableCell)({
+  borderBottom: 'none'
+})
+
+export default function SubWallet({
+  assets,
+  total,
+  portfolioId
+}: ISubWalletProps) {
   const navigate = useNavigate()
   const [columnHeaders] = useState([
     { id: 'name', caption: 'Name' },
@@ -51,13 +60,13 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
     <>
       <Container
         sx={{
-          backgroundColor: theme.palette.grey[100],
-          /*  border: `2px solid ${id.value}`, */
+          backgroundColor: 'grey[100]',
+          border: `2px solid ${portfolioId.color}`,
           borderRadius: 1
         }}
       >
         <Stack
-          direction="row"
+          direction={{ xs: 'column', sm: 'row' }}
           spacing={{ xs: 1, sm: 5 }}
           sx={{
             justifyContent: 'center',
@@ -76,13 +85,13 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
               >
                 <Typography
                   variant="subtitle2"
-                  data-testid="portfolio-heading"
-                  sx={{ fontWeight: 600 }}
+                  sx={{ fontWeight: 600, color: portfolioId.color }}
                 >
                   {item.caption}
                 </Typography>
                 <Chip
                   variant="outlined"
+                  data-testid={`portfolio-${portfolioId.label}-${item.id}`}
                   label={item.value}
                   sx={{ fontWeight: 600, fontSize: 20 }}
                 />
@@ -92,19 +101,24 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
       </Container>
       <Table>
         <TableHead>
-          <TableRow>
+          <TableRow
+            sx={{
+              borderBottom: `1px dotted ${portfolioId.color}`
+            }}
+          >
             {columnHeaders.map(({ id, caption }) => (
-              <TableCell
+              <StyledTableCell
                 key={id}
                 sx={{
                   fontWeight: 600,
+                  borderBottom: 'none',
                   ...(id === 'marketCap' && {
                     display: { xs: 'none', sm: 'block' }
                   })
                 }}
               >
                 {caption}
-              </TableCell>
+              </StyledTableCell>
             ))}
           </TableRow>
         </TableHead>
@@ -114,9 +128,13 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
               key={coin.originalId}
               hover
               onClick={() => navigate(`/coins/${coin.originalId}`)}
-              sx={{ textDecoration: 'none', cursor: 'pointer' }}
+              sx={{
+                textDecoration: 'none',
+                cursor: 'pointer',
+                borderBottom: `1px dotted ${portfolioId.color}`
+              }}
             >
-              <TableCell>
+              <StyledTableCell>
                 <Stack direction="row" alignItems="center" spacing={2}>
                   <Avatar
                     src={coin.logo}
@@ -133,19 +151,19 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
                   </Box>
                   <Box sx={{ fontWeight: 600 }}>{coin.symbol}</Box>
                 </Stack>
-              </TableCell>
-              <TableCell>{formatToUSD(currentPrice)}</TableCell>
-              <TableCell>
+              </StyledTableCell>
+              <StyledTableCell>{formatToUSD(currentPrice)}</StyledTableCell>
+              <StyledTableCell>
                 {' '}
                 <Stack direction="row" alignItems="center" spacing={2}>
                   <Box sx={{ fontWeight: 600 }}>
                     {formatToUSD(holdings.usd)}
                   </Box>
-                  <Box>
+                  <Box sx={{ display: { xs: 'none', md: 'block' } }}>
                     {holdings.original} {coin.symbol}
                   </Box>
                 </Stack>
-              </TableCell>
+              </StyledTableCell>
             </TableRow>
           ))}
         </TableBody>

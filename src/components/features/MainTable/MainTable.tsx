@@ -7,7 +7,6 @@ import Stack from '@mui/material/Stack'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import TableCell from '@mui/material/TableCell'
-import { useTheme } from '@mui/material'
 import { IFormattedCoinData } from '../../views/HomePage/HomePage.helper'
 
 interface IMainTableProps {
@@ -16,7 +15,6 @@ interface IMainTableProps {
 }
 
 export default function MainTable({ inputData, searchId }: IMainTableProps) {
-  const theme = useTheme()
   const navigate = useNavigate()
   const columnHeaders = [
     { id: 'rank', caption: '#' },
@@ -83,8 +81,8 @@ export default function MainTable({ inputData, searchId }: IMainTableProps) {
                 sx={{
                   fontWeight: 600,
                   color: priceChange.data.positive
-                    ? theme.palette.success.main
-                    : theme.palette.error.main
+                    ? 'success.main'
+                    : 'error.main'
                 }}
               >
                 {priceChange.data.label}

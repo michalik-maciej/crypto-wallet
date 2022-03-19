@@ -1,6 +1,5 @@
 import { FormControl, FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { useFormContext } from 'react-hook-form'
-import { useTheme } from '@mui/material/styles'
 import { capitalize } from '../../../utils/utils'
 
 interface RadioInputProps {
@@ -10,7 +9,6 @@ interface RadioInputProps {
 
 export default function RadioInput({ groupName, labels }: RadioInputProps) {
   const { register } = useFormContext()
-  const theme = useTheme()
 
   return (
     <FormControl>
@@ -25,14 +23,10 @@ export default function RadioInput({ groupName, labels }: RadioInputProps) {
               <Radio
                 sx={{
                   color:
-                    groupName === `subWalletLabel`
-                      ? label
-                      : theme.palette.primary.main,
+                    groupName === `subWalletLabel` ? label : 'primary.main',
                   '&.Mui-checked': {
                     color:
-                      groupName === `subWalletLabel`
-                        ? label
-                        : theme.palette.primary.main
+                      groupName === `subWalletLabel` ? label : 'primary.main'
                   }
                 }}
               />

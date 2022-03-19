@@ -79,6 +79,7 @@
     "react/react-in-jsx-scope": 0,
     "no-underscore-dangle": 0,
     "import/no-named-as-default": 0,
+    "@typescript-eslint/no-non-null-assertion": 0,
     "react/jsx-uses-react": 0
   }
 }

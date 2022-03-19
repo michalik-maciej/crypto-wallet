@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material/styles'
 import IconButton from '@mui/material/IconButton'
 
 interface IMenuButtonProps {
@@ -12,15 +11,13 @@ export default function MenuButton({
   label,
   action
 }: IMenuButtonProps) {
-  const theme = useTheme()
-
   return (
     <IconButton
       aria-label={label}
       size="large"
       onClick={action}
       sx={{
-        color: theme.palette.primary.contrastText,
+        color: 'primary.contrastText',
         '&:hover': {
           backgroundColor: 'rgba(0,0,0,.4)'
         }

@@ -12,10 +12,11 @@ describe('transaction', () => {
 
     // check portfolio balance
     cy.findByRole('button', { name: /user portfolio/i }).click()
-    let accountBalanceOld = 0
-    cy.get(`[data-testid=portfolio-heading]`).then(
-      (balance) => (accountBalanceOld += balance.text())
+    let oldBalance
+    cy.get(`[data-testid=portfolio-green-netCost] > .MuiChip-label`).then(
+      ($balance) => (oldBalance = $balance.text())
     )
+
     // go to homepage, search and select coin
     cy.findByRole('button', { name: /back to homepage/i }).click()
     cy.findByRole('textbox', { name: /coin search/i })
@@ -25,14 +26,30 @@ describe('transaction', () => {
     cy.get('.MuiTableBody-root > .MuiTableRow-root > :nth-child(1)').click()
 
     // add price and amount and click add transaction
+
+    const coinQty = 100
+    const coinPrice = 0.99
+
     cy.findByRole('radio', { name: /deposit/i }).click()
-    cy.get(`#coinQuantity`).click().type('100')
-    cy.get(`#pricePerCoin`).click().clear().type('0.99')
+    cy.get(`#coinQuantity`).click().type(coinQty.toString())
+    cy.get(`#pricePerCoin`).click().clear().type(coinPrice.toString())
     cy.findByRole('button', { name: /add transaction/i }).click()
 
     // go to portfolio
     cy.findByRole('button', { name: /user portfolio/i }).click()
 
     // verify change in portfolio balance on selected coin
+    cy.get(`[data-testid=portfolio-green-netCost] > .MuiChip-label`).then(
+      ($balance) => {
+        console.log($balance.text())
+        const convertedOldBalance = parseFloat(oldBalance.replace(/\$|,/g, ''))
+        const convertedNewBalance = parseFloat(
+          $balance.text().replace(/\$|,/g, '')
+        )
+        expect(convertedNewBalance - convertedOldBalance).to.equal(
+          coinPrice * coinQty
+        )
+      }
+    )
   })
 })

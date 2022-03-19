@@ -28,4 +28,5 @@ export interface IUserLoginInput {
 export interface IUserLoginOutput {
   userId: string
   message: string
+  admin: boolean
 }
