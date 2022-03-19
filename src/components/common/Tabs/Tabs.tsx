@@ -1,8 +1,9 @@
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import { IPortfolioSettings } from '../../../settings/settings'
 
 interface ICustomTabsProps {
-  tabConfig: { value: string; label: string }[]
+  tabConfig: IPortfolioSettings[]
   getValue: string
   setValue: (a: string) => void
 }

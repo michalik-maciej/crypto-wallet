@@ -5,10 +5,13 @@ import TableRow from '@mui/material/TableRow'
 import TableHead from '@mui/material/TableHead'
 import Stack from '@mui/material/Stack'
 import Box from '@mui/material/Box'
+import Container from '@mui/material/Container'
+import Chip from '@mui/material/Chip'
 import TableBody from '@mui/material/TableBody'
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from '@mui/material/styles'
 import { ISingleAsset } from '../../views/Portfolio/Portfolio.helper'
 import { formatToUSD } from '../../../utils/utils'
 
@@ -18,6 +21,7 @@ export interface ISubWalletProps {
 }
 
 export default function SubWallet({ assets, total }: ISubWalletProps) {
+  const theme = useTheme()
   const navigate = useNavigate()
   const [columnHeaders] = useState([
     { id: 'name', caption: 'Name' },
@@ -45,21 +49,47 @@ export default function SubWallet({ assets, total }: ISubWalletProps) {
 
   return (
     <>
-      <Stack direction="row" spacing={5} my={4}>
-        {!!assets.length &&
-          totalBalance.map((item) => (
-            <Box key={item.id}>
-              <Typography
-                variant="subtitle2"
-                sx={{ fontWeight: 600 }}
-                data-testid="portfolio-heading"
+      <Container
+        sx={{
+          backgroundColor: theme.palette.grey[100],
+          /*  border: `2px solid ${id.value}`, */
+          borderRadius: 1
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={{ xs: 1, sm: 5 }}
+          sx={{
+            justifyContent: 'center',
+            py: 3
+          }}
+        >
+          {!!assets.length &&
+            totalBalance.map((item) => (
+              <Box
+                key={item.id}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center'
+                }}
               >
-                {item.caption}
-              </Typography>
-              <Typography variant="h5">{item.value}</Typography>
-            </Box>
-          ))}
-      </Stack>
+                <Typography
+                  variant="subtitle2"
+                  data-testid="portfolio-heading"
+                  sx={{ fontWeight: 600 }}
+                >
+                  {item.caption}
+                </Typography>
+                <Chip
+                  variant="outlined"
+                  label={item.value}
+                  sx={{ fontWeight: 600, fontSize: 20 }}
+                />
+              </Box>
+            ))}
+        </Stack>
+      </Container>
       <Table>
         <TableHead>
           <TableRow>

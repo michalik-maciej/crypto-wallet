@@ -4,3 +4,8 @@ const portfolioSettings = [
   { value: '#883997', label: 'purple' }
 ]
 export default portfolioSettings
+
+export type IPortfolioSettings = {
+  value: string
+  label: string
+}
