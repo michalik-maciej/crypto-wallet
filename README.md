@@ -15,6 +15,7 @@
 - Redux Toolkit & RTK Query
 - React Router
 - React Hook Form
+- React Testing Library
 - Material UI
 - Yup Form Validation 
 - REST API
@@ -51,6 +52,12 @@ cd crypto-wallet-frontend && npm install
 ### Run the app
 
 ```
-cd crypto-wallet-backend && npm run start
-cd ../crypto-wallet-frontend && npm run start
+cd crypto-wallet-backend && npm start
+cd ../crypto-wallet-frontend && npm start
+```
+
+### Unit testing
+
+```
+cd ../crypto-wallet-frontend && npm test
 ```

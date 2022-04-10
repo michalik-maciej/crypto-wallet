@@ -1,0 +1,52 @@
+[
+  {
+    "coinId": "bitcoin",
+    "rank": {
+      "data": 1
+    },
+    "name": {
+      "data": {
+        "image": "https://assets.coingecko.com/coins/images/1/large/bitcoin.png?1547033579",
+        "name": "Bitcoin",
+        "symbol": "BTC"
+      }
+    },
+    "price": {
+      "data": "$42,726.00"
+    },
+    "priceChange": {
+      "data": {
+        "label": "-0.16",
+        "positive": false
+      }
+    },
+    "marketCap": {
+      "data": "$810,761,430,907.00"
+    }
+  },
+  {
+    "coinId": "ethereum",
+    "rank": {
+      "data": 2
+    },
+    "name": {
+      "data": {
+        "image": "https://assets.coingecko.com/coins/images/279/large/ethereum.png?1595348880",
+        "name": "Ethereum",
+        "symbol": "ETH"
+      }
+    },
+    "price": {
+      "data": "$3,252.31"
+    },
+    "priceChange": {
+      "data": {
+        "label": "0.97",
+        "positive": true
+      }
+    },
+    "marketCap": {
+      "data": "$391,028,904,503.00"
+    }
+  }
+]
